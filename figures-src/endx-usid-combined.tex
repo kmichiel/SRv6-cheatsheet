@@ -1,0 +1,71 @@
+\input{dofirst}
+\documentclass{standalone}
+%\usepackage{tabularray}
+\input{preamble}
+\input{tikzpacket-newer-sa-da}
+\input{tikznetwork}
+
+\begin{document}%
+    \begin{tikzpicture}
+
+    \usetikzlibrary{math,calc}
+    \node[align=left, opacity=0, anchor=south west] at (0,0) (sample) {DA:~\texttt{fc00:0:3:e004:5:}};
+    \tikzmath{
+        coordinate \wNode;
+        \wNode1=(sample.east) - (sample.west);
+        \n1= {veclen(\wNodex1,\wNodey1) - \pgflinewidth};
+        \wNode2=(sample.north) - (sample.south);
+        \n2= {veclen(\wNodex2,\wNodey2) - \pgflinewidth};
+    }
+    \def\pktwidth{\n1}
+    \def\pktheight{\n2}
+
+    \tikzset{artr/.style={router}}
+    \tikzset{abigrtr/.style={router, scale=1.5, semithick}} % thin (0.4pt) at scale 1.5 is semithick (0.6pt)
+    \tikzset{albl/.style={font=\Large}}
+    \tikzstyle{uAarrow}=[>={Straight Barb[width=12pt,length=8pt]}]
+
+        \node[abigrtr](3){3};
+        
+        \node[below=.1cm of 3, albl] (label) {uN + uA};
+
+        \node[below=0.1cm of label](3b){};
+        \node[anchor=east, minimum width=1cm] at (3b-|3.west)(3bl){};
+        \node[anchor=west, minimum width=1cm] at (3b-|3.east)(3br){};
+
+    % pkt2
+    \node[right=.2cm of 3br.east, anchor=north west](pkt2){%
+      \ipsixpktnew[\pktwidth pt]{\texttt{fc00:0:1::1}}{\texttt{fc00:0:\underline{5::}}}%
+    };
+
+    % pkt1
+    \node[left=.2cm of 3bl.west, anchor=south east] at (3bl.west|-pkt2.south) (pkt1){%
+      \ipsixpktnew[\pktwidth pt]{\texttt{fc00:0:1::1}}{\texttt{fc00:0:3:e004:5::}}%
+    };
+    
+        \node[anchor=east, minimum width=1cm] at (pkt1-|3.west)(3bl){};
+        \node[anchor=west, minimum width=1cm] at (pkt1-|3.east)(3br){};
+
+        \draw[bigarrow] (3bl.west) -- (3bl.east);
+        \draw[bigarrow] (3br.west) -- (3br.east);
+
+    \node[artr, anchor=west] at (3-|pkt1.west) (1) {1};
+    \node[artr, anchor=east] at (3-|pkt2.east) (5) {5};
+    \node[artr] at ($(3)!0.8!(1)$) (2) {2};
+    \node[artr] at ($(3)!0.8!(5)$) (4) {4};
+    
+    \draw[connec, dashed] (1) -- (2);
+    \draw[connec, dashed] (2) -- (3);
+    \draw[connec, dashed] (3) -- (4);
+    \draw[connec, dashed] (4) -- (5);
+
+    \draw[connec, double, ultra thick, ->, uAarrow] (3) -- (4);
+
+    \pgfsize{\mywidth}{\myheight}
+\end{tikzpicture}
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}
+
+
+

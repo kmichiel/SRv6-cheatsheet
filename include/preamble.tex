@@ -1,0 +1,123 @@
+%\PassOptionsToPackage{gray}{xcolor}
+\usepackage[utf8]{inputenc}
+%\usepackage[dvipsnames,table]{xcolor}
+%\usepackage{array}
+\usepackage{tikz}
+\usepackage{environ}
+\usepackage{colortbl}
+
+\usepackage[scaled]{helvet}
+\renewcommand\familydefault{\sfdefault}
+%\usepackage[scaled]{FiraMono}
+\usepackage{inconsolata}
+\usepackage[T1]{fontenc}
+
+\usetikzlibrary{positioning, arrows.meta}
+\usetikzlibrary{shapes.arrows}
+\usetikzlibrary {shapes.callouts}
+\usetikzlibrary{shapes.misc}
+
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{calc, fit, positioning}
+\usetikzlibrary{calligraphy}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary {shapes.symbols}
+\usetikzlibrary{decorations.markings}
+
+\input{colors}
+\input{tikzpacket}
+\input{tikznetwork}
+\input{pics}
+
+% remove the additional space after ":" when using tt text
+% see https://tex.stackexchange.com/questions/118455/why-is-there-extra-space-after-in-texttt
+\AddToHook{cmd/ttfamily/after}{\frenchspacing}
+
+\tikzset{%
+  show curve controls/.style={
+    postaction={
+      decoration={
+        show path construction,
+        curveto code={
+          \draw [blue] 
+            (\tikzinputsegmentfirst) -- (\tikzinputsegmentsupporta)
+            (\tikzinputsegmentlast) -- (\tikzinputsegmentsupportb);
+          \fill [red, opacity=0.5] 
+            (\tikzinputsegmentsupporta) circle [radius=.2ex]
+            (\tikzinputsegmentsupportb) circle [radius=.2ex];
+        }
+      },
+      decorate
+}}}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}m{#1}}
+%
+%\NewEnviron{rndtable}[1]{%
+%  \addtolength{\extrarowheight}{1ex}%
+%  \rowcolors{2}{tablecolor!20}{tablecolor!40}%
+%  \savebox{\tablebox}{%
+%    \begin{tabular}{#1}%
+%      \BODY%
+%    \end{tabular}}%
+%  \begin{tikzpicture}
+%    \begin{scope}
+%      \clip[rounded corners=1ex] (0,-\dp\tablebox) -- (\wd\tablebox,-\dp\tablebox) -- (\wd\tablebox,\ht\tablebox) -- (0,\ht\tablebox) -- cycle;
+%      \node at (0,-\dp\tablebox) [anchor=south west,inner sep=0pt]{\usebox{\tablebox}};
+%    \end{scope}
+%    \draw[rounded corners=1ex] (0,-\dp\tablebox) -- (\wd\tablebox,-\dp\tablebox) -- (\wd\tablebox,\ht\tablebox) -- (0,\ht\tablebox) -- cycle;
+%  \end{tikzpicture}
+%}
+
+\newlength{\mywidth}
+\newlength{\myheight}
+
+% adapted from https://tex.stackexchange.com/questions/616317/tikz-determining-the-size-in-cm-of-a-finished-tikz-picture
+\makeatletter
+\newcommand{\pgfsize}[2]{ % #1 = width, #2 = height
+    \pgfextractx{\@tempdima}{\pgfpointdiff{\pgfpointanchor{current bounding box}{south west}}
+        {\pgfpointanchor{current bounding box}{north east}}}
+    \global#1=\@tempdima
+        \pgfextracty{\@tempdima}{\pgfpointdiff{\pgfpointanchor{current bounding box}{south west}}
+            {\pgfpointanchor{current bounding box}{north east}}}
+    \global#2=\@tempdima
+}
+\def\convertto#1#2{\strip@pt\dimexpr #2*65536/\number\dimexpr 1#1}
+\makeatother
+% add right before \end{tikzpicture}:
+% \pgfsize{\mywidth}{\myheight}
+% then between \end{tikzpicture} and \end{document} you can use \mywidth and \myheight
+% e.g. just log it:
+%    \typeout{W=\the\mywidth}
+%    \typeout{H=\the\myheight}
+% or add it in the doc:
+%Width = \convertto{cm}{\the\mywidth} cm -
+%Height = \convertto{cm}{\the\myheight} cm
+% to manually convert the TeX "pt" value to somethig else, see
+% https://tex.stackexchange.com/questions/207162/how-can-i-determine-the-max-dimensions-to-use-for-an-image-im-adding-to-my-docu
+% 72.27 TeX pt per Inch, 300 DPI as example
+% width_px = floor((345.0 pt)*(1 in / 72.27 pt)*(300 px / 1 in))
+% width_px = floor(1432.129514 px)
+% width_px = 1432 px
+
+
+% adjust the line widths
+\newlength\mylinewidth
+\setlength\mylinewidth{0.6pt}
+
+\tikzset{
+    ultra thin/.style= {line width=0.25\mylinewidth},
+    very thin/.style=  {line width=0.5\mylinewidth},
+    thin/.style=       {line width=\mylinewidth},
+    semithick/.style=  {line width=1.5\mylinewidth},
+    thick/.style=      {line width=2\mylinewidth},
+    very thick/.style= {line width=3\mylinewidth},
+    ultra thick/.style={line width=4\mylinewidth},
+    every picture/.style={thin}
+    every node/.style={thin},
+}
+% removed path from the above list
+%    every path/.style={thin}
+
+

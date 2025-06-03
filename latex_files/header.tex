@@ -1,0 +1,167 @@
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = LuaLaTeX
+
+%%%% first stuff for PDF metadata
+\begin{filecontents*}{\jobname.xmpdata}
+\Title{Segment Routing, Part III -- SRv6}
+Clarence Filsfils, Ahmed Abdelsalam, Pablo Camarillo, François Clad, Kris Michielsen
+\Author{Clarence Filsfils\sep Ahmed Abdelsalam\sep Pablo Camarillo\sep François Clad\sep Kris Michielsen}
+%\Keywords{cookies\sep muffins\sep cakes}
+%\Publisher{Baking International}
+\end{filecontents*}
+
+\documentclass[11pt, twoside]{memoir}
+
+\errorcontextlines 10000 %% for debugging errors
+
+%\pdfcompresslevel=0 %% deliver uncompressed pdf ???
+
+%% prepare for loading xcolor
+\PassOptionsToPackage{usenames, dvipsnames, svgnames, table}{xcolor}
+%%  prepare for loading url package
+\PassOptionsToPackage{hyphens}{url}
+%\PassOptionsToPackage{breaklinks=true}{hyperref}
+\PassOptionsToPackage{breaklinks=true,hidelinks}{hyperref}
+
+%\usepackage[a-1a]{pdfx} % it was said to load this before hyperref package
+
+\usepackage{SR_book_style}
+
+\usepackage{geometry}
+\geometry{
+  %xetex,
+  %pdftex,
+  luatex,
+  %centering,
+  twoside,
+  %includeheadfoot, 
+  nomarginpar,
+  paperheight=10in, paperwidth=7in,
+  %paper=a4paper,
+  layoutheight=10in, layoutwidth=7in,
+  %layouthoffset=16.1mm,layoutvoffset=21.5mm,
+  %bindingoffset=5mm,
+  inner=1in,outer=.75in,top=1in,bottom=.875in,           % margins
+  %headheight=6mm,headsep=12mm,
+  %showframe,
+  %showcrop
+}
+
+\usepackage{float} %figure inside minipage
+
+\usepackage{catchfilebetweentags} % include tables from external file
+
+%%%KM uncomment to draw boxes
+%\directlua{ require("drawboxes")}
+%\usepackage{graphicx,atbegshi}
+
+%\AtBeginShipout {\directlua{drawboxes.visual_debug()}}
+%%%KM end uncomment
+
+%\usepackage{microtype}
+\usepackage{calc}
+
+\usepackage{enumitem} % allows aligning definition lists
+
+\hyphenation{post-con-ver-gence to-pol-o-gy-in-de-pen-dent traf-fic-en-gi-neer-ing re-clas-si-fy-ing SR-op-ti-mized Sep-tem-ber} 
+\hyphenation{match-es}
+\hyphenation{UDP/VxLAN}
+\hyphenation{draft-ietf-spring-srv6-srh-com-pres-sion}
+\hyphenation{10.-17487-/-RFC-5340}
+\hyphenation{next-hop next-hops}
+\hyphenation{LO-CAL\_PREF}
+
+%\pdftitle{blabla}
+%\pdfauthor{blabla}
+%\pdfsubject{blabla}
+%\pdfkeywords{blabla}
+
+\newcommand{\kmref}[1]{} % provide a way to disable the wrong \ref that where present by replacing them with \kmref
+\newcommand{\kmhref}[2]{} % provide a way to disable the \href in the bibliographies by replacing them with \kmref
+
+%% for circled numbers (\ding{xxx})
+\usepackage{pifont}
+%% mark /sout (strikethrough) red
+\newcommand{\sout}[1]{\color{red} #1 \color{black}}
+
+% display the hyperref URL (clickable) in a footnote
+%\usepackage{hyperref}
+\newcommand\fnurl[2]{%
+\href{#1}{#2}\footnote{\url{#1}}%
+}
+
+% enables using smiley
+%\usepackage[nointegrals]{wasysym}
+\newfontfamily\symbolafont{Symbola.ttf}
+\newcommand\winkey{{\symbolafont\symbol{"1F609}}\relax}
+\newcommand\smiley{{\symbolafont\symbol{"1F60A}}\relax}
+%\usepackage{emoji}
+%\newcommand{\winkey}{\fontspec{Symbola}\symbol{"1F609}}
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  % KM 2024/10/17 set to hardcoded value 0
+  %\setlength{\itemsep}{#2\baselineskip}}}
+  \setlength{\itemsep}{0\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+%% watch out! without normalem option all italic text becomes underlined
+\usepackage[normalem]{ulem}
+\newcommand{\st}{\sout} % This line defines \st as an alias for \sout
+
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\noindent\textsf{\bfseries{#1}}}
+
+% customize 3rd level list bullet
+\usepackage{amssymb} % for the square symbol
+\renewcommand{\labelitemiii}{$\square$} % small square bullet
+
+\DeclareGraphicsExtensions{.pdf,.png}
+
+\newlength{\mylength} % used when splitting text boxes, defined once
+\usepackage{breakurl}
+    \expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks%  save the current one
+    \do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j%
+    \do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t%
+    \do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D%
+    \do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N%
+    \do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X%
+    \do\Y\do\Z\do\/\do\-\do\.\do.}
+
+\urlstyle{same} % keep the font of \url the same
+
+% hyphenate also words with a hyphen in it
+% https://tex.stackexchange.com/questions/417746/allow-latex-to-hyphenate-words-with-dashes/417883#417883
+\directlua{require('hyphenateall')}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

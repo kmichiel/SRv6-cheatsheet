@@ -1,0 +1,51 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\input{tikzpacket}
+\input{tikznetwork}
+
+\begin{document}%
+  \begin{tikzpicture}
+    \node[bigrtr](1){1};
+    \node[bigrtr_transit, right=2cm of 1](11){};
+    \node[bigrtr_transit, right=2cm of 11](12){};
+    \node[bigrtr, right=2cm of 12](2){2};
+    \node[bigrtr_transit, right=2cm of 2](21){};
+    \node[bigrtr_transit, right=2cm of 21](22){};
+    \node[bigrtr, right=2cm of 22](3){3};
+
+    \draw[connec] (1) -- (11);
+    \draw[connec] (11) -- (12);
+    \draw[connec] (12) -- (2);
+    \draw[connec] (2) -- (21);
+    \draw[connec] (21) -- (22);
+    \draw[connec] (22) -- (3);
+
+    \node[below=.1cm of 2, scale=1.5]{End with uSID (uN)};
+
+    \node[below=1.5cm of 2](2b){};
+    \node[left=1cm of 2b](2bl){};
+    \node[right=1cm of 2b](2br){};
+    \node[left=1cm of 2bl](2bll){};
+    \node[right=1cm of 2br](2brr){};
+
+    \draw[bigarrow] (2bll) -- (2bl);
+    \draw[bigarrow] (2br) -- (2brr);
+
+    \node[left=.2cm of 2bll](pkt1){%
+      \ipsrhpkt[\xlargepktwidth]{fc00:0:1::1}{fc00:0:2:3:4::}{%
+        \texttt{fc00:0:5:6:7::},
+        \texttt{fc00:0:2:3:4::}%
+      }{1}%
+    };
+    \node[right=.2cm of 2brr](pkt2){%
+      \ipsrhpkt[\xlargepktwidth]{fc00:0:1::1}{fc00:0:\underline{3:4::}}{%
+        \texttt{fc00:0:5:6:7::},
+        \texttt{fc00:0:2:3:4::}%
+      }{1}%
+    };
+\pgfsize{\mywidth}{\myheight}
+  \end{tikzpicture}%
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}

@@ -1,0 +1,63 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+%\usepackage{tabularray}
+\input{tikzpacket}
+\usepackage{multirow, makecell}
+\usepackage{ulem}
+
+% colors:
+% \cbgSix
+% \cbgSixLight
+% \cbgSRH
+% \cbgSRHLight
+
+\begin{document}%
+    \savebox{\tableboxa}{%
+    \setlength\extrarowheight{5pt}%
+    \setlength\arrayrulewidth{1pt}%
+    \begin{tabular}{m{1.3cm} m{2.1cm} R{.5cm} m{2cm} m{2.55cm}}
+        \cbgSix&
+        \multicolumn{2}{l}{\cbgSixLight Source Address} &
+        \texttt{fc00:0:1::1}
+        \\[3pt]\cline{2-5}
+            \cbgSix\multirowcell{-2}{IPv6\\ Header}&
+            \multicolumn{2}{l}{\cbgSixLight Destination Address} &
+        \sout{\texttt{fc00:0:2::}}&
+        $\rightarrow$ \textbf{\texttt{fc00:0:3::}}
+        \\[3pt]\hline
+        \cbgSRH&
+        \multicolumn{2}{l}{\cbgSRHLight Segments Left}&
+        \sout{2}&
+        $\rightarrow$ \textbf{1}
+        \\[3pt]\cline{2-5}
+            \cbgSRH&
+        \cbgSRHLight Segment List&
+        \cbgSRHLight 0. & \texttt{fc00:0:4::}
+        \\
+        \cbgSRH& \cbgSRHLight &
+        \cbgSRHLight \textbf{1}. & \textbf{\texttt{fc00:0:3::}}
+        \\
+        \cbgSRH\multirowcell{-4}{SR\\ Header}& \cbgSRHLight &
+        \cbgSRHLight 2. & \texttt{fc00:0:2::}
+        \\[3pt]\hline
+        \multicolumn{5}{c}{\cbgPayload Payload}\\[3pt]
+    \end{tabular}}%
+    \begin{tikzpicture}
+        \begin{scope}
+            \clip[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+            \node at (0,-\dp\tableboxa) [anchor=south west,inner sep=0pt]{\usebox{\tableboxa}};
+        \end{scope}
+        \draw[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+
+    %\draw[very thick, ->, PKTANNOT, >=latex, dashed] (8.2,.5) .. controls (8.2,.1) and (5.3,.8) .. (4.92, -.45);
+    \draw[very thick, ->, PKTANNOT, >=latex, dashed] (7.6,-.6) to [out=0,in=270] (9.3, 1);
+
+    \draw (7.85,.85) node[circle,draw,PKTANNOT, inner sep=1pt] {\scriptsize 1};
+    \draw (9.3,0) node[circle,draw,PKTANNOT, inner sep=1pt] {\scriptsize 2};
+\pgfsize{\mywidth}{\myheight}
+    \end{tikzpicture}
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}
+

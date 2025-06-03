@@ -1,0 +1,41 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\input{tikznetwork}
+
+\begin{document}%
+  \begin{tikzpicture}
+    % Import base topo
+    \input{topo1}
+
+    % Primary path from Node 1 to Node 5
+    \draw[srpath0, ->] ([xshift=2pt, yshift=-2pt]1.north east)
+      -- ([xshift=-2pt, yshift=-2pt]5.north west);
+
+    % Mark the protected node
+    \node[failed_router, fill=EXPLOSION, text=EXPLOSIONTEXT](3f) at (3) {3};
+
+    % TI-LFA node-protecting backup path from Node 1 to Node 5
+    \draw[srpath0_tilfa, ->] ([xshift=-2pt, yshift=-2pt]1.south east)
+      .. controls ([xshift=-3pt, yshift=-3pt]2.north east) ..
+      ([xshift=-2pt, yshift=-2pt]4.north west);
+    %\draw[srpath0_tilfa, ->] ([xshift=-2pt, yshift=2pt]4.north east)
+    %  -- ([xshift=-2pt, yshift=2pt]5.south west);
+    \draw[srpath0_tilfa, ->] (4) to[out=55, in=215] (5);
+
+    % Legend
+    \node[below=.5cm of 2, inner sep=0, outer sep=0](a1){};
+    \node[below=.35cm of a1, inner sep=0, outer sep=0](a2){};
+
+    \node[right=0cm of a1, inner sep=0, outer sep=0](l1){};
+    \node[right=1cm of l1](m1){\scriptsize Primary path from Node 1 to Node 5};
+    \draw[srpath0, ->] (l1) -- (m1);
+
+    \node[right=0cm of a2, inner sep=0, outer sep=0](l2){};
+    \node[right=1cm of l2](m2){\scriptsize TI-LFA segment list from Node 1 to Node 5};
+    \draw[srpath0_tilfa, ->] (l2) -- (m2);
+\pgfsize{\mywidth}{\myheight}
+  \end{tikzpicture}%
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}

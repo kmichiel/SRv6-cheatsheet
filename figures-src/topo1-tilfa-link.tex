@@ -1,0 +1,46 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\input{tikznetwork}
+
+\begin{document}%
+  \begin{tikzpicture}
+    % Import base topo
+    \input{topo1}
+
+    % Primary path from Node 1 to Node 5
+    \draw[srpath0, ->] ([xshift=2pt, yshift=-2pt]1.north east)
+      -- ([xshift=-2pt, yshift=-2pt]5.north west);
+
+    % Mark the protected link
+    \draw[draw=none] (1) -- (3) node [midway, failed_link, fill=EXPLOSION] {};
+
+    % TI-LFA link-protecting backup path from Node 1 to Node 5
+    \draw[srpath0_tilfa, ->] ([xshift=-2pt, yshift=-2pt]1.south east)
+      .. controls ([xshift=-3pt, yshift=-3pt]2.north east) ..
+      ([xshift=-2pt, yshift=-2pt]4.north west);
+    \draw[srpath0_alt, ->] ([xshift=-2pt, yshift=2pt]4.north east)
+      .. controls ([xshift=-3pt, yshift=3pt]3.south east) ..
+      ([xshift=-2pt, yshift=2pt]5.south west);
+
+    % Legend
+    \node[below=.5cm of 2, inner sep=0, outer sep=0](a1){};
+    \node[below=.35cm of a1, inner sep=0, outer sep=0](a2){};
+    \node[below=.35cm of a2, inner sep=0, outer sep=0](a3){};
+
+    \node[right=0cm of a1, inner sep=0, outer sep=0](l1){};
+    \node[right=1cm of l1](m1){\scriptsize Primary path from Node 1 to Node 5};
+    \draw[srpath0, ->] (l1) -- (m1);
+
+    \node[right=0cm of a2, inner sep=0, outer sep=0](l2){};
+    \node[right=1cm of l2](m2){\scriptsize TI-LFA segment list from Node 1 to Node 5};
+    \draw[srpath0_tilfa, ->] (l2) -- (m2);
+
+    \node[right=0cm of a3, inner sep=0, outer sep=0](l3){};
+    \node[right=1cm of l3](m3){\scriptsize Unaffected path from Node 4 to Node 5};
+    \draw[srpath0_alt, ->] (l3) -- (m3);
+\pgfsize{\mywidth}{\myheight}
+  \end{tikzpicture}%
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}

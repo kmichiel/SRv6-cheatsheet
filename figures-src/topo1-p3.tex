@@ -1,0 +1,17 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\input{tikznetwork}
+
+\begin{document}%
+    \begin{tikzpicture}
+        % Import base topo
+        \input{topo1}
+
+        % Adj SID
+        \draw[srpath0, ->] (4) to[out=55, in=215] (5);
+\pgfsize{\mywidth}{\myheight}
+    \end{tikzpicture}%
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}

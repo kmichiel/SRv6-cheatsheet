@@ -1,0 +1,32 @@
+% arara: lualatex
+% arara: lualatex
+
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = LuaLaTeX
+
+\input{header.tex}
+%\usepackage{tabularx}
+\usepackage{ltablex}
+\usepackage{amsmath}
+\usepackage{hyphenat}
+
+% for draft version:
+%\overfullrule=5pt
+
+\usepackage{tikz}
+
+\begin{document}
+% watermark
+\AddToHook{shipout/foreground}{
+       \begin{tikzpicture}[overlay, remember picture]
+           \node[fill=none, draw=none, text=red, anchor=north, font=\Huge, align=center, yshift=0.5*\pageheight] at (current page) {Copy for Dan Voyer\\do not distribute};
+        \end{tikzpicture}    
+    }
+\frontmatter
+\input{copyright.tex}
+\input{dedication.tex}
+\input{0000_Preface_v2.tex}
+\input{TOC}
+
+\mainmatter  %%% the meat of the book
+

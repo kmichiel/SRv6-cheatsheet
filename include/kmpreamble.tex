@@ -1,0 +1,15 @@
+\input{preamble}
+%\input{tikzpacket}
+%\input{tikznetwork}
+%\input{pics}
+
+%%% needed for packet "tables"
+\usepackage{multirow}
+\def\headerbits{0}
+    \newcounter{bitcnt}
+    \loop\ifnum\thebitcnt<31
+    \stepcounter{bitcnt}
+        \edef\headerbits{\headerbits & \thebitcnt}
+    \repeat
+%%% end packet "tables"
+

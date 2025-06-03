@@ -1,0 +1,148 @@
+\ifdefined\tikzpacketnewerIsLoaded
+  % contentr of file has already been included, do nothing
+\else
+  % Define the flag to prevent future inclusions
+  \def\tikzpacketnewerIsLoaded{}
+
+
+
+\newsavebox{\tableboxb}
+
+\providecommand{\smallpktwidth}{2.5cm}
+\providecommand{\stdpktwidth}{5.1cm}
+\providecommand{\largepktwidth}{5.9cm}
+\providecommand{\xlargepktwidth}{6.6cm}
+
+% color definitions moved to colors.tex
+
+\providecommand{\cbgPayload}{\cellcolor{hdrBgPayload}\color{hdrTxtPayload}}
+\providecommand{\cbgFour}{\cellcolor{hdrBgFour}\color{hdrTxtFour}}
+\providecommand{\cbgSix}{\cellcolor{hdrBgSix}\color{hdrTxtSix}}
+\providecommand{\cbgSixLight}{\cellcolor{hdrBgSixLight}\color{hdrTxtSixLight}}
+\providecommand{\cbgSRH}{\cellcolor{hdrBgSRH}\color{hdrTxtSRH}}
+\providecommand{\cbgSRHLight}{\cellcolor{hdrBgSRHLight}\color{hdrTxtSRHLight}}
+\providecommand{\cbgUDP}{\cellcolor{hdrBgUDP}\color{hdrTxtUDP}}
+
+\NewEnviron{srv6packetnew}[1][\stdpktwidth]{%
+    \savebox{\tableboxb}{%
+    \setlength\extrarowheight{5pt}%
+    \begin{tabular}{m{2em} m{#1}}
+        \BODY%
+        \multicolumn{2}{c}{\cbgPayload Payload}\\[3pt]
+    \end{tabular}}%
+    \begin{tikzpicture}
+        \begin{scope}
+            \clip[rounded corners=1ex] (0,-\dp\tableboxb) -- (\wd\tableboxb,-\dp\tableboxb) -- (\wd\tableboxb,\ht\tableboxb) -- (0,\ht\tableboxb) -- cycle;
+            \node at (0,-\dp\tableboxb) [anchor=south west,inner sep=0pt]{\usebox{\tableboxb}};
+        \end{scope}
+        \draw[rounded corners=1ex] (0,-\dp\tableboxb) -- (\wd\tableboxb,-\dp\tableboxb) -- (\wd\tableboxb,\ht\tableboxb) -- (0,\ht\tableboxb) -- cycle;
+    \end{tikzpicture}
+}
+
+\NewEnviron{srv6packet2new}{%
+    \savebox{\tableboxb}{%
+    \setlength\extrarowheight{5pt}%
+    \begin{tabular}{m{1.3cm} m{\stdpktwidth}}
+        \BODY%
+        \multicolumn{2}{c}{\cbgPayload Payload}\\[3pt]
+    \end{tabular}}%
+    \begin{tikzpicture}
+        \begin{scope}
+            \clip[rounded corners=1ex] (0,-\dp\tableboxb) -- (\wd\tableboxb,-\dp\tableboxb) -- (\wd\tableboxb,\ht\tableboxb) -- (0,\ht\tableboxb) -- cycle;
+            \node at (0,-\dp\tableboxb) [anchor=south west,inner sep=0pt]{\usebox{\tableboxb}};
+        \end{scope}
+        \draw[rounded corners=1ex] (0,-\dp\tableboxb) -- (\wd\tableboxb,-\dp\tableboxb) -- (\wd\tableboxb,\ht\tableboxb) -- (0,\ht\tableboxb) -- cycle;
+    \end{tikzpicture}
+}
+
+%\newcommand{\ipfourhdr}[2]{\cbgFour IPv4 & (\texttt{#1}, \texttt{#2})\\[3pt]\hline}
+\newcommand{\ipfourhdrnew}[2]{\cbgFour IPv4 & %
+    \begin{tikzpicture}%
+        \node[align=left, inner sep=0] (xx) {\\[2pt](#1)};%
+    \end{tikzpicture}\\[3pt]\hline}
+%\newcommand{\ipsixhdr}[2]{\cbgSix IPv6 & (\texttt{#1}, \texttt{#2})\\[3pt]\hline}
+\newcommand{\ipsixhdrnew}[2]{\cbgSix IPv6 & %
+    \begin{tikzpicture}%
+        \node[align=left, inner sep=0, yshift=1.5pt] (xx) {\\[2pt](#1)};%
+    \end{tikzpicture}\\[3pt]\hline}
+%\newcommand{\srhdr}[2]{\cbgSRH SR Hdr & (#1)\hspace{1cm}SL~=~#2\\[3pt]\hline}
+\newcommand{\srhdrnew}[2]{\cbgSRH SRH & %
+    \begin{tikzpicture}%
+        \node[align=left, inner sep=0] (xx) {\\[2pt](#1)\\SL~=~#2};%
+    \end{tikzpicture}\\[3pt]\hline}
+
+\newcommand{\smallipsixpktnew}[3][\smallpktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipsixhdrnew{#2}{#3}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\ipsixpktnew}[3][\stdpktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipsixhdrnew{#2}{#3}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\largeipsixpktnew}[3][\largepktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipsixhdrnew{#2}{#3}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\smallipfourpktnew}[3][\smallpktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipfourhdrnew{#2}{#3}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\ipfourpktnew}[3][\stdpktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipfourhdrnew{#2}{#3}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\ipsrhpktnew}[5][\stdpktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipsixhdrnew{#2}{#3}%
+        \srhdrnew{#4}{#5}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\ipfourinsixpktnew}[5][\stdpktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipsixhdrnew{#2}{#3}%
+        \ipfourhdrnew{#4}{#5}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\largeipfourinsixpktnew}[5][\largepktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipsixhdrnew{#2}{#3}%
+        \ipfourhdrnew{#4}{#5}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\xlargeipfourinsixpktnew}[5][\xlargepktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipsixhdrnew{#2}{#3}%
+        \ipfourhdrnew{#4}{#5}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\ipsixinsixpktnew}[5][\stdpktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipsixhdrnew{#2}{#3}%
+        \ipsixhdrnew{#4}{#5}%
+    \end{srv6packetnew}
+}
+
+\newcommand{\largeipsixinsixpktnew}[5][\largepktwidth]{%
+    \begin{srv6packetnew}[#1]%
+        \ipsixhdrnew{#2}{#3}%
+        \ipsixhdrnew{#4}{#5}%
+    \end{srv6packetnew}
+}
+
+
+\fi
+

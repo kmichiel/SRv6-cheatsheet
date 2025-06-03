@@ -1,0 +1,20 @@
+numberSections: false  # latex will number them
+sectionsDepth: 5
+chaptersDepth: 1
+#chapters: number elements as chapter.item and restart item on each first-level heading -- ignored in latex output?
+chapters: true
+figPrefix:
+  - "Figure"
+  - "Figures"
+lstPrefix:
+  - "Example"
+  - "Examples"
+tblPrefix:
+  - "Table"
+  - "Tables"
+secPrefix: "section"
+chapDelim: "."
+listingTitle: "Example"
+linkReferences: true
+link-citations: true
+nameInLink: true    # include label name in hyperlink

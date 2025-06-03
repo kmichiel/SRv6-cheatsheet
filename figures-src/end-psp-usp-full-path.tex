@@ -1,0 +1,138 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\input{tikzpacket-newer-sa-da}
+\input{tikznetwork}
+
+\begin{document}%
+    \begin{tikzpicture}
+
+    \usetikzlibrary{math,calc}
+    \node[align=left, opacity=0, anchor=south west] at (0,0) (sample) {SA:~\texttt{fc00:0:3::}};
+    \tikzmath{
+        coordinate \wNode;
+        \wNode1=(sample.east) - (sample.west);
+        \n1= {veclen(\wNodex1,\wNodey1) - \pgflinewidth};
+        \wNode2=(sample.north) - (sample.south);
+        \n2= {veclen(\wNodex2,\wNodey2) - \pgflinewidth};
+    }
+    \def\pktwidth{\n1}
+    \def\pktheight{\n2}
+
+    \tikzset{artr/.style={router}}
+    \tikzset{abigrtr/.style={router, scale=1.5, semithick}} % thin (0.4pt) at scale 1.5 is semithick (0.6pt)
+    \tikzset{albl/.style={font=\Large}}
+
+    \def\interpkt{4cm}
+    
+        % Routers
+        \node[abigrtr](1){1};
+        \node[abigrtr, right=\interpkt of 1](3){3};
+        \node[abigrtr, right=\interpkt of 3](4){4};
+        \node[abigrtr, right=\interpkt of 4](5){5};
+        \node[abigrtr, right=\interpkt of 5](6){6};
+        \node[abigrtr, right=\interpkt of 6](7){7};
+        \node[abigrtr, right=\interpkt of 7](9){9};
+
+        % Add dashed lines between routers (with invisible midway nodes to center the packets)
+        \draw[connec, dashed] (1) -- (3) node[midway](13){};
+        \draw[connec] (3) -- (4) node[midway](34){};
+        \draw[connec] (4) -- (5) node[midway](45){};
+        \draw[connec] (5) -- (6) node[midway](56){};
+        \draw[connec] (6) -- (7) node[midway](67){};
+        \draw[connec, dashed] (7) -- (9) node[midway](79){};
+
+        % Add labels below the routers
+        \node[below=.1cm of 4, albl, align=center]{End with PSP \& USD};
+        \node[below=.1cm of 5, albl, align=center]{End with PSP \& USD};
+        \node[below=.1cm of 6, albl, align=center] (label) {End with PSP \& USD\\ \emph{PSP: SRH removal}};
+        \node[below=.1cm of 7, albl, align=center]{End with PSP \& USD\\ \emph{USD: Decapsulation}};
+
+        \begin{scope}[opacity=0]
+        % pkt3 invisible
+        \node[anchor=north, below=0.1cm of label](ypkt){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+                \ipsixhdrnew{\texttt{fc00:0:3::1}}{\texttt{\underline{fc00:0:6::}}}%
+                \srhdrnew{(\texttt{fc00:0:7::}, \\\phantom{(}\texttt{fc00:0:6::},\\\phantom{(}\texttt{fc00:0:5::}, \\\phantom{(}\texttt{fc00:0:4::})}%
+                {\underline{1}}%
+                \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{fc00:0:9::}}%
+            \end{srv6packetnew}%
+        };
+            
+        \end{scope}
+
+        % Add packet diagrams below the links
+        % pkta
+        \node[anchor=south] at (13|-ypkt.south)(pkta){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+                \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{fc00:0:9::}}%
+            \end{srv6packetnew}%
+        };
+        
+        % pkt1
+        \node[anchor=south] at (34|-ypkt.south)(pkt1){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+                \ipsixhdrnew{\texttt{fc00:0:3::1}}{\texttt{\underline{fc00:0:4::}}}%
+                \srhdrnew{(\texttt{fc00:0:7::}, \\\phantom{(}\texttt{fc00:0:6::},\\\phantom{(}\texttt{fc00:0:5::}, \\\phantom{(}\texttt{fc00:0:4::})}%
+                {3}%
+                \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{fc00:0:9::}}%
+            \end{srv6packetnew}%
+        };
+        
+        % pkt2
+        \node[anchor=south] at (45|-ypkt.south)(pkt2){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+                \ipsixhdrnew{\texttt{fc00:0:3::1}}{\texttt{\underline{fc00:0:5::}}}%
+                \srhdrnew{(\texttt{fc00:0:7::}, \\\phantom{(}\texttt{fc00:0:6::},\\\phantom{(}\texttt{fc00:0:5::}, \\\phantom{(}\texttt{fc00:0:4::})}%
+                {\underline{2}}%
+                \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{fc00:0:9::}}%
+            \end{srv6packetnew}%
+        };
+        
+        % pkt3
+        \node[anchor=south] at (56|-ypkt.south)(pkt3){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+                \ipsixhdrnew{\texttt{fc00:0:3::1}}{\texttt{\underline{fc00:0:6::}}}%
+                \srhdrnew{(\texttt{fc00:0:7::}, \\\phantom{(}\texttt{fc00:0:6::},\\\phantom{(}\texttt{fc00:0:5::}, \\\phantom{(}\texttt{fc00:0:4::})}%
+                {\underline{1}}%
+                \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{fc00:0:9::}}%
+            \end{srv6packetnew}%
+        };
+        
+        % pkt4
+        \node[anchor=south] at (67|-ypkt.south)(pkt4){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+                \ipsixhdrnew{\texttt{fc00:0:3::1}}{\texttt{\underline{fc00:0:7::}}}%
+                \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{fc00:0:9::}}%
+            \end{srv6packetnew}%
+        };
+        
+        % pkt5
+        \node[anchor=south] at (79|-ypkt.south)(pkt5){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+                \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{fc00:0:9::}}%
+            \end{srv6packetnew}%
+        };
+
+        \node[] at (pkta-|3) (3b){};
+        \node[anchor=north, minimum width=1cm] at (3b)(3bc){};
+        \node[anchor=north, minimum width=1cm] at (3b-|4)(4bc){};
+        \node[anchor=north, minimum width=1cm] at (3b-|5)(5bc){};
+        \node[anchor=north, minimum width=1cm] at (3b-|6)(6bc){};
+        \node[anchor=north, minimum width=1cm] at (3b-|7)(7bc){};
+
+        \draw[bigarrow] (3bc.west) -- (3bc.east);
+        \draw[bigarrow] (4bc.west) -- (4bc.east);
+        \draw[bigarrow] (5bc.west) -- (5bc.east);
+        \draw[bigarrow] (6bc.west) -- (6bc.east);
+        \draw[bigarrow] (7bc.west) -- (7bc.east);
+
+
+\pgfsize{\mywidth}{\myheight}
+    \end{tikzpicture}%
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}
+
+
+

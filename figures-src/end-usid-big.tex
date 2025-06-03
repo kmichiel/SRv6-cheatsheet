@@ -1,0 +1,38 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\input{tikzpacket}
+\usepackage{multirow, makecell}
+\usepackage{ulem}
+
+\begin{document}%
+  \savebox{\tableboxa}{%
+  \setlength\extrarowheight{5pt}%
+  \setlength\arrayrulewidth{1pt}%
+  \begin{tabular}{m{1.3cm} m{3.1cm} m{4.55cm}}
+    \cbgSix & \cbgSixLight Source Address & \texttt{fc00:0:1::1} \\[3pt]\cline{2-3}
+    \cbgSix & \cbgSixLight Destination Address & \sout{\texttt{fc00:0:2:3:4:0:0:0}} \\
+    \cbgSix\multirowcell{-3}{IPv6\\ Header} &
+    \cbgSixLight & \textbf{\texttt{fc00:0:3:4:0:0:0:0}} \\[3pt]\hline
+    \multicolumn{3}{c}{\cbgPayload Payload}\\[3pt]
+  \end{tabular}}%
+  \begin{tikzpicture}
+    \begin{scope}
+      \clip[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+      \node at (0,-\dp\tableboxa) [anchor=south west,inner sep=0pt]{\usebox{\tableboxa}};
+    \end{scope}
+    \draw[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+
+    \draw[PKTANNOT] (7.33, .2) rectangle (9.3, .56);
+    \draw[PKTANNOT] (6.91, -.4) rectangle (8.87, -.04);
+    \draw[PKTANNOT] (9.02, -.4) rectangle (9.3, -.04);
+
+    \draw[very thick, ->, PKTANNOT, >=latex, dashed] (8, .1) to (7, .1);
+
+    \draw (6.7, .1) node[circle,draw,PKTANNOT, inner sep=1pt] {\scriptsize 1};
+    \draw (9.53, 0) node[circle,draw,PKTANNOT, inner sep=1pt] {\scriptsize 2};
+\pgfsize{\mywidth}{\myheight}
+  \end{tikzpicture}
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}

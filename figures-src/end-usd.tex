@@ -1,0 +1,77 @@
+\input{dofirst}
+\documentclass{standalone}
+%\usepackage{tabularray}
+\input{preamble}
+\input{tikzpacket-newer-sa-da}
+\input{tikznetwork}
+
+\begin{document}%
+    \begin{tikzpicture}
+
+    \usetikzlibrary{math,calc}
+    \node[align=left, opacity=0, anchor=south west] at (0,0) (sample) {SA:~\texttt{fc00:0:4::}};
+    \tikzmath{
+        coordinate \wNode;
+        \wNode1=(sample.east) - (sample.west);
+        \n1= {veclen(\wNodex1,\wNodey1) - \pgflinewidth};
+        \wNode2=(sample.north) - (sample.south);
+        \n2= {veclen(\wNodex2,\wNodey2) - \pgflinewidth};
+    }
+    \def\pktwidth{\n1}
+    \def\pktheight{\n2}
+
+    \tikzset{artr/.style={router}}
+    \tikzset{abigrtr/.style={router, scale=1.5, semithick}} % thin (0.4pt) at scale 1.5 is semithick (0.6pt)
+    \tikzset{albl/.style={font=\Large}}
+
+        \node[abigrtr](6){6};
+        
+        \node[below=.1cm of 6, albl] (label) {End with USD};
+
+        \node[below=0.1cm of label](6b){};
+        \node[anchor=east, minimum width=1cm] at (6b-|6.west)(6bl){};
+        \node[anchor=west, minimum width=1cm] at (6b-|6.east)(6br){};
+
+        % pkt1
+        \node[left=.2cm of 6bl.west, anchor=north east](pkt1) {%}
+            \begin{srv6packetnew}[\pktwidth pt]%
+                \ipsixhdrnew{\texttt{fc00:0:4::1}}{\texttt{fc00:0:6::}}%
+                \srhdrnew{(\texttt{fc00:0:6::}, \\\phantom{(}\texttt{fc00:0:5::})}%
+                {0}%
+                \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{fc00:0:9::}}%
+            \end{srv6packetnew}%
+        };
+
+        % pkt2
+        \node[right=.2cm of 6br.east, anchor=south west] at (6br.east|-pkt1.south) (pkt2){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+              \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{fc00:0:9::}}%
+            \end{srv6packetnew}};
+
+        \node[left=.2cm of 6bl.west](h1){};
+
+        \node[anchor=east, minimum width=1cm] at (pkt2-|6.west)(6bl){};
+        \node[anchor=west, minimum width=1cm] at (pkt2-|6.east)(6br){};
+
+        \draw[bigarrow] (6bl.west) -- (6bl.east);
+        \draw[bigarrow] (6br.west) -- (6br.east);
+
+
+    \node[artr, anchor=west] at (6-|pkt1.west) (1) {1};
+    \node[artr, anchor=east] at (6-|pkt2.east) (9) {9};
+    \node[artr] at ($(6)!0.8!(1)$) (4) {4};
+    \node[artr] at ($(6)!0.6!(1)$) (5) {5};
+    
+    \draw[connec, dashed] (6) -- (5);
+    \draw[connec, dashed] (6) -- (9);
+    \draw[connec, dashed] (5) -- (4);
+    \draw[connec, dashed] (4) -- (1);
+
+    \pgfsize{\mywidth}{\myheight}
+\end{tikzpicture}
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}
+
+
+

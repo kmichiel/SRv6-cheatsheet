@@ -1,0 +1,1099 @@
+%\documentclass[10pt, twoside]{memoir}
+
+% microtype
+\usepackage[%
+	activate={true,nocompatibility},%
+	final,%
+	tracking=true,%
+	%kerning=true,% not yet supported
+	%spacing=true,% not yet supported
+	factor=1100,%
+	stretch=10,shrink=10,%
+]{microtype}
+% activate={true,nocompatibility} - activate protrusion and expansion
+% final - enable microtype; use "draft" to disable
+% tracking=true, kerning=true, spacing=true - activate these techniques
+% factor=1100 - add 10% to the protrusion amount (default is 1000)
+% stretch=10, shrink=10 - reduce stretchability/shrinkability (default is 20/20)
+
+\iffalse
+\usepackage{geometry}
+\geometry{%
+	paperwidth=7in,
+	paperheight=10in,
+	left=0.875in,
+	right=0.625in,
+	top=1in,
+	bottom=0.625in,
+	twoside,
+	%showframe,
+	%showcrop,
+}
+\fi
+
+%%% an example for 7x10 book
+\iffalse
+\geometry{
+  %xetex,
+  pdftex,
+  centering,twoside,includehead,nofoot,nomarginpar,
+  paper=a4paper,layoutheight=10in,layoutwidth=7in,layouthoffset=16.1mm,layoutvoffset=21.5mm,
+  bindingoffset=5mm,
+  inner=15mm,outer=15mm,top=20mm,bottom=20mm,           % margins
+  headheight=6mm,headsep=12mm,
+  showframe,
+  showcrop
+}
+\fi
+
+\iffalse
+\usepackage{geometry}
+\geometry{
+  xetex,centering,twoside,
+  %includeheadfoot,
+  nomarginpar,
+  paper=a4paper,layoutheight=10in,layoutwidth=7in,layouthoffset=16.1mm,layoutvoffset=21.5mm,
+  %bindingoffset=5mm,
+  inner=1in,outer=.75in,top=1in,bottom=.875in,           % margins
+  %headheight=6mm,headsep=12mm,
+  %showframe,
+  showcrop
+}
+\fi
+
+%%% createspace package
+\iffalse
+\usepackage[%
+	size=journal,%
+	trim=1,%
+	%preview=letter,%
+	nopdf,
+]{createspace}
+\fi
+
+%%% memoir
+
+%%% page style
+\addtopsmarks{ruled}{}{
+  \createmark{chapter}{left}{nonumber}{}{}
+}
+\pagestyle{ruled} % activate changes
+\makepagestyle{ruled}
+	\makeevenfoot {ruled}{\thepage}{}{} % page numbers at the outside
+	\makeoddfoot {ruled}{}{}{\thepage}
+	\makeheadrule {ruled}{\textwidth}{\normalrulethickness}
+	\makeevenhead {ruled}{\titlefont\leftmark}{}{} % small caps
+	\makeoddhead {ruled}{}{}{\titlefont\rightmark}
+
+%%% lists
+\firmlists % reduce spacing between list elements
+
+%%% captions
+\usepackage[font=it, %italic captions
+	labelfont=bf, % bold italic label
+%	justification=justified, % justify captions cfr paragraphs
+	justification=centering, % justify captions cfr paragraphs
+	singlelinecheck=false, % don't justify single line caption
+	labelsep=period, % use period after label
+]{caption}
+
+%%% paragraphs
+%\usepackage{parskip} % don't indent paragraphs -- doesn't work with memoir
+\setlength{\parindent}{0pt}
+\nonzeroparskip
+
+%%% chapter and section numbering depth
+\setsecnumdepth{paragraph} % number up to paragraph
+\maxsecnumdepth{paragraph} % does the same, I think
+\settocdepth{paragraph}
+
+%%% chapter style
+%%% Veelo style
+%\usepackage{graphicx}
+%\chapterstyle{veelo}
+
+%%% Veelo style for smaller pages
+\makeatletter
+\newlength{\numberheight}
+\setlength{\numberheight}{\beforechapskip}
+
+\makechapterstyle{myveelo}{
+  \setlength{\afterchapskip}{40pt}
+  \renewcommand*{\chapterheadstart}{\vspace*{40pt}}
+  \renewcommand*{\afterchapternum}{\par\nobreak\vskip 25pt}
+  \renewcommand*{\chapnamefont}{\normalfont\LARGE\flushright}
+  \renewcommand*{\chapnumfont}{\normalfont\HUGE}
+  \renewcommand*{\chaptitlefont}{\normalfont\HUGE\bfseries\flushright}
+  \renewcommand*{\printchaptername}{%
+  \chapnamefont\MakeUppercase{\@chapapp}}
+  \renewcommand*{\chapternamenum}{}
+  \setlength{\beforechapskip}{18mm}
+  \setlength{\midchapskip}{\paperwidth}
+  \addtolength{\midchapskip}{-\textwidth}
+  \addtolength{\midchapskip}{-\spinemargin}
+  \addtolength{\midchapskip}{-11.5em}
+  \renewcommand*{\printchapternum}{%
+    \enspace\resizebox{!}{\numberheight}{\chapnumfont\thechapter}%
+    \rlap{\hspace{1cm}\rule{\midchapskip}{\beforechapskip}}%
+  }%
+  \renewcommand*{\printchapternum}{% my experiment
+    \enspace\resizebox{!}{\numberheight}{\chapnumfont\thechapter}%
+  }% end of my experiment
+  \makeoddfoot{plain}{}{}{\thepage}%
+  %% km
+  \renewcommand*{\chapnamefont}{\sffamily\LARGE\flushright}
+  \renewcommand*{\chapnumfont}{\sffamily\HUGE}
+  \renewcommand*{\chaptitlefont}{\sffamily\HUGE\flushright}
+}
+
+\chapterstyle{myveelo}
+\makeatother
+
+%%%%%%%%%%% part page
+% from http://texdoc.net/texmf-dist/doc/latex/memoir/memman.pdf
+%\newcommand{\part}[1]{%    % THIS IS A VERY SIMPLIFIED VERSION
+%	\cleardoublepage         % start a new recto page
+%	\thispagestyle{part}     % set the page style
+%	\beforepartskip          % space before Name and Number
+%	\printpartname\partnamenum\printpartnum
+%	\midpartskip             % space after Name and Number
+%	\printparttitle{#1}      % print the title
+%	\partpageend}            % finish off
+%	\newcommand{\partpageend}{%  THIS IS SIMPLIFIED
+%	\afterpartskip
+%	% ifblankpage then blank next page and restore twocolumn if necessary
+%}
+
+% to only print the part number
+\renewcommand{\partnamefont}{\sffamily\LARGE\flushright}
+%was: \renewcommand{\printpartname}{\hspace*{\fill}\sffamily\LARGE SECTION}
+\renewcommand{\printpartname}{\hspace*{\fill}\sffamily\LARGE }
+%\renewcommand{\partnamenum}{}
+
+%  \setlength{\midpartskip}{\paperwidth}
+%  \addtolength{\midpartskip}{-\textwidth}
+%  \addtolength{\midpartskip}{-\spinemargin}
+%  \addtolength{\midpartskip}{-11.5em}
+
+\renewcommand{\partnumfont}{\sffamily\HUGE}
+
+  \renewcommand{\printpartnum}{%
+    \enspace\resizebox{!}{\numberheight}{\chapnumfont\thepart}%
+%    \enspace\resizebox{!}{\numberheight}{\sffamily\HUGE\thepart}%
+  }%
+
+\renewcommand{\beforepartskip}{}
+\renewcommand{\afterpartskip}{\vspace*{40pt}}
+\renewcommand{\partpageend}{\afterpartskip}
+
+%\setlength{\afterpartskip}{40pt}
+
+\renewcommand\partnamefont{\sffamily\LARGE\scshape\flushright}
+\renewcommand\partnumfont{\sffamily\Large\scshape\flushright}
+%\renewcommand\parttitlefont{\sffamily\Huge\flushright}
+%\renewcommand{\partnumfont}{\normalfont\HUGE}
+\renewcommand{\parttitlefont}{\normalfont\HUGE\bfseries\flushright}
+
+  \renewcommand{\partnamefont}{\sffamily\LARGE\flushright}
+  \renewcommand{\partnumfont}{\sffamily\Huge\flushright}
+  \renewcommand{\parttitlefont}{\sffamily\HUGE\flushright}
+
+%\setsecheadstyle{\normalfont\Large\bfseries\sffamily}
+
+%%%%%%%%%%%
+
+
+
+%%% Pedersen chapter style
+%\chapterstyle{pedersen}
+%\renewcommand*{\chapnumfont}{\sffamily\huge}
+%\renewcommand*{\chaptitlefont}{\sffamily\huge}
+
+%%% section style
+%\makeatletter
+%\g@addto@macro\chapnamefont{\sffamily} 
+%\g@addto@macro\chapnumfont{\sffamily}  
+%\g@addto@macro\chaptitlefont{\sffamily}
+%\makeatother
+\setsecheadstyle{\LARGE\sffamily}
+\setsubsecheadstyle{\Large\sffamily}
+\setsubsubsecheadstyle{\large\sffamily}
+\setparaheadstyle{\large\sffamily}
+\setsubparaheadstyle{\large\sffamily}
+\setafterparaskip{1ex} % newline after paragraph heading
+
+%%% TOC styling
+\renewcommand{\cftpartfont}{\normalfont\bfseries\sffamily}   
+\renewcommand{\cftchapterfont}{\normalfont\sffamily}   
+\renewcommand{\cftsectionfont}{\normalfont\sffamily}   
+\renewcommand{\cftsubsectionfont}{\normalfont\sffamily}   
+\renewcommand{\cftsubsubsectionfont}{\normalfont\sffamily}   
+\renewcommand{\cftparagraphfont}{\normalfont\sffamily}   
+
+\renewcommand{\cftpartpagefont}{\normalfont\bfseries\sffamily}   
+\renewcommand{\cftchapterpagefont}{\normalfont\sffamily}   
+\renewcommand{\cftsectionpagefont}{\normalfont\sffamily} 
+\renewcommand{\cftsubsectionpagefont}{\normalfont\sffamily} 
+\renewcommand{\cftsubsubsectionpagefont}{\normalfont\sffamily} 
+\renewcommand{\cftparagraphpagefont}{\normalfont\sffamily} 
+
+%%% bibliography
+\renewcommand{\bibsection}{%
+%\section{\bibname}
+\section{References}% hardcode bibliography title
+\prebibhook}
+
+%%% about widows and orphans
+%\setlength{\topskip}{1.6\topskip}
+%\checkandfixthelayout
+\sloppybottom
+
+%%% enable rotation of figures, tables, ...
+%%% must be loaded before tablefootnote
+\usepackage{rotating}
+
+%%% put footnotes inside an mdframe outside of the frame
+\usepackage{tablefootnote} 
+\makeatletter 
+\AfterEndEnvironment{SROpinion}{%
+ \tfn@tablefootnoteprintout% 
+ \gdef\tfn@fnt{0}% 
+}
+\makeatother
+
+%%% urls
+\usepackage{url}
+\makeatletter
+%\g@addto@macro{\UrlBreaks}{\UrlOrds}
+%\g@addto@macro{\UrlBreaks}{\do\-\do\/\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
+\makeatother
+
+%%% Colors %%%
+\usepackage[usenames, dvipsnames, svgnames, table]{xcolor}
+%\usepackage{xcolor}
+%\definecolor{SRgreen}{RGB}{14, 191, 48}
+%\definecolor{SRorange}{RGB}{243, 126, 25}
+\definecolor{SRred}{RGB}{230, 6, 85}
+%\definecolor{SRcodeBackground}{RGB}{224, 224, 224}
+\definecolor{SRcodeFrame}{RGB}{109, 108, 109}
+%\definecolor{SRGray}{RGB}{224, 224, 224}
+\definecolor{SRGray}{RGB}{201, 201, 201}
+%\definecolor{SRTableHead}{RGB}{230, 6, 85}
+%\definecolor{SRTableRowTwo}{RGB}{230, 230, 230}
+%\definecolor{SRTableRowOne}{RGB}{240, 240, 240}
+%\definecolor{SRemphasis}{RGB}{165, 32, 23}
+%\definecolor{SRwarning}{RGB}{250, 175, 52}
+%\definecolor{SRcritical}{RGB}{229, 0, 72}
+%\definecolor{SRnormal}{RGB}{54, 160, 220}
+%\definecolor{SRbulletinBackground}{RGB}{224, 224, 224}
+%\definecolor{SRtheorem}{RGB}{14, 191, 48}
+
+%%% fonts %%%
+\usepackage{fontspec}
+%%% scale fonts
+\setsansfont[Scale=MatchLowercase]{Verdana}
+\defaultfontfeatures{ Scale = MatchLowercase }
+\defaultfontfeatures[\rmfamily]{ Scale = 1}
+\defaultfontfeatures{Ligatures=TeX}
+
+%\setmainfont{Source Serif Pro}[
+%    BoldFont=Source Serif Pro,
+%    ItalicFont=Lato Light Italic,
+%    BoldItalicFont=Lato Italic
+%]
+
+% main font: crimson. This sets all available variants
+\setmainfont{crimson}
+
+%%% monospace font
+\setmonofont{Inconsolata Regular}[
+	Scale=MatchLowercase,
+	BoldFont=Inconsolata Bold,
+]
+
+%\setsansfont{Source Sans Pro Light}[
+%    BoldFont=Source Sans Pro,
+%    ItalicFont=Source Sans Pro Light Italic,
+%    BoldItalicFont=Source Sans Pro Italic
+%]
+
+% default Sans Serif font: source Sans Pro
+\setsansfont{sourcesansprolight}[
+	Scale=MatchLowercase,
+	BoldFont={sourcesanspro}, 
+	ItalicFont={sourcesansprolightit},
+	BoldItalicFont={sourcesansproit}
+]
+%%% use heavier (normal) sans font
+\setsansfont{sourcesanspro}[
+	Scale=MatchLowercase,
+	BoldFont={sourcesansprobold}, 
+	ItalicFont={sourcesansproit},
+	BoldItalicFont={sourcesansproboldit}
+]
+
+%%% KM: for texlive after 2016, replace s/new/set/
+%%%\newfontfamily{\sidebarfont}{sourcesanspro}[
+%%%\setfontfamily{\sidebarfont}{sourcesanspro}[
+\setfontfamily{\sidebarfont}{sourcesanspro}[
+        Scale=MatchLowercase,
+        BoldFont={sourcesansprobold},
+        ItalicFont={sourcesansproit},
+        BoldItalicFont={sourcesansproboldit}
+]
+
+%\newfontfamily{\titlefont}{Source Sans Pro Light}[
+%    BoldFont=Source Sans Pro,
+%    ItalicFont=Source Sans Pro Light Italic,
+%    BoldItalicFont=Source Sans Pro Italic
+%]
+% Font for chapter number
+%\newfontfamily{\upperNumber}{Source Sans Pro Light}[
+%    BoldFont=Source Sans Pro,
+%    ItalicFont=Source Sans Pro Light Italic,
+%    BoldItalicFont=Source Sans Pro Italic
+%]
+
+% Font for titles
+\newfontfamily{\titlefont}{sourcesansprolight}[
+	Scale=MatchLowercase,
+        BoldFont={sourcesanspro},
+        ItalicFont={sourcesansprolightit},
+        BoldItalicFont={sourcesansproit}
+]
+
+% Font for chapter number
+\newfontfamily{\upperNumber}{sourcesansprolight}[
+        BoldFont={sourcesanspro},
+        ItalicFont={sourcesansprolightit},
+        BoldItalicFont={sourcesansproit}
+]
+
+%%% put border around figures
+%\usepackage{float}
+%\floatstyle{boxed} 
+%\restylefloat{figure}
+
+%%% styling the examples
+\usepackage{mdframed}
+\mdfdefinestyle{SRExampleStyle}{
+	skipabove=4mm,
+	skipbelow=0mm,
+	%remove borders
+	rightline=false,
+	topline=false,
+	bottomline=false,
+	linewidth=.25pt,
+	leftline=false, %added
+	%margins
+	innertopmargin=2mm,  %was 2mm
+	innerleftmargin=0mm, %was 0mm
+	innerbottommargin=0mm,  %was 0mm
+	innerrightmargin=10pt,
+	linecolor=SRcodeFrame,
+	%backgroundcolor=SRcodeBackground
+}
+
+\usepackage{listings}
+\lstdefinestyle{SRListingStyle}{
+	showstringspaces=false,
+	numbers=left,
+	numbersep=7mm,
+	numberstyle=\scriptsize\color{SRGray},
+	stepnumber=1,
+	tabsize=3,
+	breakatwhitespace=false,
+	breaklines=true,
+	%captionpos=t,
+	%basicstyle=\footnotesize\color{Black}\ttfamily,
+	basicstyle=\scriptsize\ttfamily,
+	%commentstyle=\color{SRgreen},
+	%keywordstyle=\color{SRorange}\bfseries,
+	%stringstyle=\color{SRred},
+	frame=leftline,
+	xleftmargin=3mm,
+	framesep=2mm,
+	%framerule=0mm,
+	abovecaptionskip=5mm,
+	aboveskip=\baselineskip,
+	belowskip=\baselineskip,
+	moredelim={[is][\ttfamily]{£}{£}},
+	frame=single,
+}
+
+%%% unused
+%\newcommand{\tableCaption}{}
+%\mdfdefinestyle{SRTableStyle}{
+%            skipabove=4mm,
+%            skipbelow=0mm,
+%            %remove borders
+%            rightline=false,
+%            topline=false,
+%            bottomline=false,
+%            linewidth=1mm,
+%            %margins
+%            innertopmargin=0mm,
+%            innerleftmargin=0mm,
+%            innerbottommargin=0mm,
+%            innerrightmargin=0pt,
+%            backgroundcolor=TMcodeBackground,
+%            linecolor=SRTableHead,
+%}
+
+%%\everyrow{\tabucline[.4mm white]{}}
+%%\tabulinesep=^3mm_2mm
+%%\taburowcolors[2] 2{TMtableRowOne .. TMtableRowTwo}
+
+% example to align caption with figure
+%\begin{figure}
+%  \centering
+%  \captionbox
+%    {Blah... \label{fig:test}}
+%    {\includegraphics{test}}
+%\end{figure}
+
+%%% Figures %%%
+\usepackage{graphicx} %% Use pdf, png, jpg, or eps with pdflatex; use eps in DVI mode
+\usepackage{caption}
+
+%%% sideways figure %%%
+%    \begin{sidewaysfigure}
+%\centering
+%\includegraphics[width=0.9\textheight,height=0.5\textwidth]{example-image}
+%\caption{Intensity measure correlation}
+%\label{fig:IMs matrix correlation}
+%    \end{sidewaysfigure}
+
+% arguments:
+% 1. caption
+% 2. label
+% 3. full filename path
+% 4. float positioning
+\newcommand{\SRFigureSW}[4]{%
+        \begin{sidewaysfigure}[#4]%
+                \centering%
+%               \frame{\includegraphics[width=\textwidth]{#3}}%
+                \includegraphics[width=\textwidth]{#3}%
+                \caption{#1}%
+                \label{#2}%
+%               \captionbox{#1\label{#2}}%
+        \end{sidewaysfigure}}
+
+% arguments:
+% 1. caption
+% 2. label
+% 3. full filename path
+% 4. float positioning
+% 5. scale
+\newcommand{\SRFigureSWScaled}[5]{%
+        \begin{sidewaysfigure}[#4]%
+                % don't center scaled images
+                % center scaled images, but also center their caption
+                \centering%
+                \captionsetup{justification=centering}
+                %\frame{\includegraphics[width=#5\textwidth]{#3}}%
+                \includegraphics[width=#5\textwidth]{#3}%
+                \caption{#1}%
+                \label{#2}%
+        \end{sidewaysfigure}}
+
+
+% arguments:
+% 1. caption
+% 2. label
+% 3. full filename path
+% 4. float positioning
+\newcommand{\SRFigure}[4]{%
+	\begin{figure}[#4]%
+		\centering%
+%		\frame{\includegraphics[width=\textwidth]{#3}}%
+		\includegraphics[width=\textwidth]{#3}%
+		\caption{#1}%
+		\label{#2}%
+%		\captionbox{#1\label{#2}}%
+	\end{figure}}
+
+%%% inline Figures %%%
+\usepackage{graphicx} %% Use pdf, png, jpg, or eps with pdflatex; use eps in DVI mode
+\usepackage{caption}
+% arguments:
+% 1. caption
+% 2. label
+% 3. full filename path
+% 4. float positioning
+\newcommand{\SRFigureInline}[4]{%
+        \begin{center}%
+                \includegraphics[width=\textwidth]{#3}%
+                \captionof{figure}{#1}%
+                \label{#2}%
+        \end{center}}
+
+%%% Scaled Figures %%%
+\usepackage{graphicx} %% Use pdf, png, jpg, or eps with pdflatex; use eps in DVI mode
+\usepackage{caption}
+% arguments:
+% 1. caption
+% 2. label
+% 3. full filename path
+% 4. float positioning
+% 5. scale
+\newcommand{\SRFigureScaled}[5]{%
+        \begin{figure}[#4]%
+		% don't center scaled images
+		% center scaled images, but also center their caption
+                \centering%
+		\captionsetup{justification=centering}
+                %\frame{\includegraphics[width=#5\textwidth]{#3}}%
+                \includegraphics[width=#5\textwidth]{#3}%
+                \caption{#1}%
+                \label{#2}%
+        \end{figure}}
+
+%%% Scaled inline figure
+\usepackage{graphicx} %% Use pdf, png, jpg, or eps with pdflatex; use eps in DVI mode
+\usepackage{caption}
+% arguments:
+% 1. caption
+% 2. label
+% 3. full filename path
+% 4. float positioning
+% 5. scale
+\newcommand{\SRFigureInlineScaled}[5]{%
+	% don't center scaled images
+	% center scaled images, but also center their caption
+        \begin{center}%
+		\captionsetup{justification=centering}
+                %\frame{\includegraphics[width=#5\textwidth]{#3}}%
+                \includegraphics[width=#5\textwidth]{#3}%
+                \captionof{figure}{#1}%
+                \label{#2}%
+        \end{center}%
+	}
+
+% arguments:
+% 1. caption
+% 2. label
+% 3. full filename path
+% 4. float positioning
+\newcommand{\SRFigureNote}[5]{%
+        \begin{figure}[#4]%
+                \centering%
+%               \frame{\includegraphics[width=\textwidth]{#3}}%
+                \includegraphics[width=\textwidth]{#3}%
+                \caption*{#5}%
+                \caption{#1}%
+                \label{#2}%
+%               \captionbox{#1\label{#2}}%
+        \end{figure}}
+
+\newcommand{\SRFigureSWNote}[5]{%
+        \begin{sidewaysfigure}[#4]%
+                \centering%
+%               \frame{\includegraphics[width=\textwidth]{#3}}%
+                \includegraphics[width=\textwidth]{#3}%
+                \caption*{#5}%
+                \caption{#1}%
+                \label{#2}%
+%               \captionbox{#1\label{#2}}%
+        \end{sidewaysfigure}}
+
+
+%%% Example %%%
+\usepackage{caption}
+\usepackage{mdframed}
+\DeclareCaptionType{example}[Example][List of Examples]
+% arguments:
+% 1. caption
+% 2. label
+% 3. linenumbers
+\renewcommand{\lstlistingname}{Example}
+\lstnewenvironment{SRExample}[3]%
+{
+	% add label if it is specified
+	%\captionof{example}{#1}\ifx\relax#2\relax\else\label{#2}\fi%
+	\lstset{style=SRListingStyle,
+		moredelim={[is][\bfseries]{£}{£}},
+		abovecaptionskip=0mm,
+		belowcaptionskip=1mm,
+		aboveskip=0mm,
+		belowskip=1mm,
+		numbers=#3,
+		xleftmargin=0mm, % was 0mm
+		framesep=0mm,
+		xrightmargin=-10pt,
+		numbersep=2mm,
+		caption={#1},
+		label={#2},
+		frame=single, % was none
+		framesep=2pt, % was not defined
+		rulecolor=\color{SRGray},
+		breaklines=true,
+		postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{SRred}\hookrightarrow\space}},
+%    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color[RGB]{230, 6, 85}\hookrightarrow\space}},
+	}
+	\mdfsetup{style=SRExampleStyle, skipabove=\baselineskip}
+	\mdframed
+}
+{
+	\endmdframed
+}
+
+\lstnewenvironment{SRExampleInline}[4]%
+{
+        % add label if it is specified
+        %\captionof{example}{#1}\ifx\relax#2\relax\else\label{#2}\fi%
+        \lstset{style=SRListingStyle,
+                moredelim={[is][\bfseries]{£}{£}},
+                abovecaptionskip=0mm,
+                belowcaptionskip=3mm,
+                aboveskip=0mm,
+                belowskip=1mm,
+                numbers=#3,
+                xleftmargin=1mm,
+framesep=1mm,
+%xrightmargin=-10pt,
+xrightmargin=-2mm,
+numbersep=3mm,
+caption={#1},
+label={#2},
+%    frame=single,
+    frame=none,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{SRred}\hookrightarrow\space}},
+%    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color[RGB]{230, 6, 85}\hookrightarrow\space}},
+        }
+        \mdfsetup{style=SRExampleStyle, skipabove=\baselineskip, #4}
+        \mdframed
+}
+{
+        \endmdframed
+}
+
+%%% Equation %%%
+\DeclareCaptionType{SREquat}[Equation][List of Equations]
+\newcommand{\tmpEqOne}{}
+\newcommand{\tmpEqTwo}{}
+% arguments:
+% 1. caption
+% 2. label
+\newenvironment{SREquation}[2]%
+{
+	\renewcommand{\tmpEqOne}{#1}
+	\renewcommand{\tmpEqTwo}{#2}
+	\centering
+% moved caption to under the equation
+%	\captionsetup{justification=centering}
+%        % add label if it is specified
+%        \captionof{SREquat}{#1}%
+%	\label{#2}%
+%        \mdfsetup{style=SRExampleStyle, skipabove=1mm, nobreak=true}
+        \mdfsetup{%
+		skipabove=1mm,%
+		nobreak=true,%
+        	skipbelow=0mm,
+	        %remove borders
+	        rightline=false,
+	        topline=false,
+	        bottomline=false,
+	        %linewidth=1pt,
+	        %leftline=false, %added
+	        %margins
+	        innertopmargin=2mm,
+	        innerleftmargin=2mm,
+	        innerbottommargin=0mm,
+	        innerrightmargin=10pt,
+		outermargin=10mm,
+		innermargin=10mm,
+	        %backgroundcolor=SRcodeBackground
+	}
+        \mdframed
+}
+{
+        \endmdframed
+	\captionsetup{justification=centering}
+        % add label if it is specified
+        \captionof{SREquat}{\tmpEqOne}%
+	\label{\tmpEqTwo}%
+}
+
+%%% Table %%%
+\usepackage{booktabs}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{multirow}
+\newcommand{\tmpTableOne}{}
+\newcommand{\tmpTableTwo}{}
+% arguments:
+% 1. caption
+% 2. label
+% 3. tabular specifier
+% 4. float positioning
+\newenvironment{SRTable}[4]%
+{	\renewcommand{\tmpTableOne}{#1}
+	\renewcommand{\tmpTableTwo}{#2}
+	\begin{table}[#4] % table float start
+%\begin{threeparttable}
+	\centering
+	\captionsetup{justification=centering}
+%	\begin{tabu} spread \linewidth {#3}
+	\begin{tabu} {#3}
+}
+{	\end{tabu} 
+	\caption{\tmpTableOne}
+	\label{\tmpTableTwo}
+%\end{threeparttable}
+	\end{table}
+}
+
+\usepackage{adjustbox}
+\newenvironment{SRTableResize}[4]%
+{       \renewcommand{\tmpTableOne}{#1}
+        \renewcommand{\tmpTableTwo}{#2}
+        \begin{table}[#4] % table float start
+%\begin{threeparttable}
+        %\centering
+        \caption{\tmpTableOne}
+        \label{\tmpTableTwo}
+%       \begin{tabu} spread \linewidth {#3}
+\begin{adjustbox}{max width=\textwidth,center}
+        \begin{tabu} {#3}
+}
+{       \end{tabu}
+\end{adjustbox}
+%\end{threeparttable}
+        \end{table}
+}
+
+%%%%%%% TM STUFF %%%%%%%%%%%%%%%%%%
+
+% We now want to create the bulletin-environments
+% we first define two new mdenvironments, one for the header and one for
+% the content
+\newmdenv[
+        skipabove=4mm,
+        skipbelow=1mm,
+        innertopmargin=1mm,
+        innerbottommargin=1mm,
+        innerleftmargin=0mm,
+        innerrightmargin=0pt,
+        rightline=false,
+        %topline=false,
+        %bottomline=false,
+        leftline=false,
+	innermargin=10mm,
+	outermargin=10mm,
+        %linewidth=.25pt,
+	linewidth=\normalrulethickness,
+        %frametitlefont={\sffamily\bfseries},
+        %font={\sffamily\small\bfseries},
+        frametitlefont={\sidebarfont},
+        font={\sidebarfont\small},
+        %backgroundcolor=SRSidebarBackground,
+	nobreak=true,
+]{SRSidebarBase}
+
+\newmdenv[%
+	default, %
+	linewidth=0pt, %
+	%backgroundcolor=SRSidebarBackground%
+]{SRSidebarContent}
+
+% we then define three styles, one for each type
+%\mdfdefinestyle{normal}{linecolor=TMnormal}
+%\mdfdefinestyle{quote}{linecolor=TMnormal}
+%\mdfdefinestyle{reminder}{linecolor=TMcodeFrame}
+%\mdfdefinestyle{warning}{linecolor=TMwarning}
+%\mdfdefinestyle{highlight}{linecolor=TMwarning}
+%\mdfdefinestyle{critical}{linecolor=TMcritical}
+
+\usepackage{calc}
+
+% we then define some auxilliary commands
+\newcommand{\SRSidebarTitleContent}[2]
+{
+    \hspace*{2mm}% put non-discardable space of 2mm
+    \begin{minipage}{0.75cm}% icon minipage is 0.75cm wide
+        \includegraphics[width=\linewidth]{#1} % fit the icon in the space
+    \end{minipage}%
+    \hspace*{2mm}% put non-discardable space of 1mm
+    \begin{minipage}{\textwidth-1.55cm}% width=\textwidth-1.05cm
+%            {\Large #2} % titlefont is \Large
+            {\large #2} % titlefont is \Large
+    \end{minipage}
+}
+
+% and finally the main environment
+% takes type (warning/normal/critical) as first argument
+% takes bulletin title as second argument
+\newenvironment{SRSidebar}[2]{
+    \begin{SRSidebarBase}[%
+    	%style=#1, %
+	frametitle=\SRSidebarTitleContent{images/#1.png}{#2}%
+   ]
+   	\vspace*{1mm}
+    	\begin{SRSidebarContent}
+}
+{
+    	\end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%%%%%% END OF TM STUFF %%%%%%%%%%%%%%%%%%
+
+\newcommand{\tmpTitle}{}
+
+%%% Highlight %%%
+% arguments:
+% 1. title
+% orig:
+%\newenvironment{SRHighlight}[1]%
+%  {\begin{mdframed}\textbf{#1}\par\noindent}%
+%  {\end{mdframed}}
+\newenvironment{SRHighlight}[1]%
+  {\begin{mdframed}\ifx\relax#1\relax\else\textbf{#1}\par\noindent\fi}%
+  {\end{mdframed}}
+
+\renewenvironment{SRHighlight}[1]{
+    \ifx\relax#1%
+    \relax\renewcommand{\tmpTitle}{Highlight}%
+    \else\renewcommand{\tmpTitle}{#1}%
+    \fi%
+    \begin{SRSidebarBase}[%
+        frametitle=\SRSidebarTitleContent{images/highlight.png}{\tmpTitle}%
+   ]   
+        \vspace*{1mm}
+        \begin{SRSidebarContent}
+}
+{
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% Begin Highlight
+\newenvironment{SRHighlightBegin}[2]{
+    \ifx\relax#1%
+    \relax\renewcommand{\tmpTitle}{Highlight}%
+    \else\renewcommand{\tmpTitle}{#1}%
+    \fi%
+    \begin{SRSidebarBase}[%
+        frametitle=\SRSidebarTitleContent{images/highlight.png}{\tmpTitle},%
+        bottomline=false,
+	skipbelow=0pt,
+        innerbottommargin=0mm,
+        ]
+        \vspace*{1mm}
+        \begin{SRSidebarContent}
+}
+{
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% Mid Highlight
+\newenvironment{SRHighlightMid}[2]{
+    \begin{SRSidebarBase}[%
+        bottomline=false,
+        topline=false,
+        ]
+        \begin{SRSidebarContent}
+}
+{
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% End Highlight
+\newenvironment{SRHighlightEnd}[2]{
+    \begin{SRSidebarBase}[%
+        topline=false,
+        skipabove=0mm,
+        innertopmargin=0mm,
+        ]
+        \begin{SRSidebarContent}
+}
+{
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% Reminder %%%
+% arguments:
+% 1. title
+% orig:
+%\newenvironment{SRReminder}[1]%%
+%  {\begin{mdframed}\textbf{#1}\par\noindent}%%
+%  {\end{mdframed}}
+\newenvironment{SRReminder}[1]%%
+  {\begin{mdframed}\ifx\relax#1\relax\else\textbf{#1}\par\noindent\fi}%
+  {\end{mdframed}}
+
+\renewenvironment{SRReminder}[1]{
+    \ifx\relax#1%
+    \relax\renewcommand{\tmpTitle}{Reminder}%
+    \else\renewcommand{\tmpTitle}{#1}%
+    \fi%
+    \begin{SRSidebarBase}[%
+        frametitle=\SRSidebarTitleContent{images/reminder.png}{\tmpTitle}%
+        ]
+        \vspace*{1mm}
+        \begin{SRSidebarContent}
+}
+{
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% Begin Reminder
+\newenvironment{SRReminderBegin}[2]{
+    \ifx\relax#1%
+    \relax\renewcommand{\tmpTitle}{Reminder}%
+    \else\renewcommand{\tmpTitle}{#1}%
+    \fi%
+    \begin{SRSidebarBase}[%
+        frametitle=\SRSidebarTitleContent{images/reminder.png}{\tmpTitle},%
+        bottomline=false,
+	skipbelow=0pt,
+        innerbottommargin=0mm,
+        ]
+        \vspace*{1mm}
+        \begin{SRSidebarContent}
+}
+{
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% Mid Reminder
+\newenvironment{SRReminderMid}[2]{
+    \begin{SRSidebarBase}[%
+        bottomline=false,
+        topline=false,
+        ]
+        \begin{SRSidebarContent}
+}
+{
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% End Reminder
+\newenvironment{SRReminderEnd}[2]{
+    \begin{SRSidebarBase}[%
+        topline=false,
+        skipabove=0mm,
+        innertopmargin=0mm,
+        ]
+        \begin{SRSidebarContent}
+}
+{
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% Opinion %%%
+\newcommand{\sourcenotitle}[1]{%
+  \nobreak\parbox[t]{\linewidth}{\raggedleft \textit{--- #1}}% Placing a quote source
+}
+\newcommand{\source}[2]{%
+  \nobreak\parbox[t]{\linewidth}{\raggedleft \textit{--- #1\\#2}}% Placing a quote source
+}
+\def\signed#1{{\unskip\nobreak\hfil\penalty50
+    \hskip2em\hbox{}\nobreak\hfil\sl#1
+    \parfillskip=0pt \finalhyphendemerits=0 \par}}
+
+\newcommand{\tmpQuoteOne}{}
+\newcommand{\tmpQuoteTwo}{}
+% arguments:
+% 1. title
+% 2. person
+% 3. person's function
+\newenvironment{SROpinion}[3]%%
+{
+	\renewcommand{\tmpQuoteOne}{#2}
+	\renewcommand{\tmpQuoteTwo}{#3}
+% orig:
+%	\begin{mdframed}\textbf{#1}\par\noindent
+	\begin{mdframed}\ifx\relax#1\relax\else\textbf{#1}\par\noindent\fi%
+}
+{
+% ensure that the opinion ends with an empty line
+%	~\\[0\baselineskip]
+        \ifx\relax\tmpQuoteTwo
+		\sourcenotitle{\tmpQuoteOne}
+	\else
+		\source{\tmpQuoteOne}{\tmpQuoteTwo}
+	\fi
+	\end{mdframed}
+}
+
+\renewenvironment{SROpinion}[3]{
+    \renewcommand{\tmpQuoteOne}{#2}
+    \renewcommand{\tmpQuoteTwo}{#3}
+    \ifx\relax#1%
+    \relax\renewcommand{\tmpTitle}{Opinion}%
+    \else\renewcommand{\tmpTitle}{#1}%
+    \fi%
+    \begin{SRSidebarBase}[%
+        frametitle=\SRSidebarTitleContent{images/quote.png}{\tmpTitle}%
+   ]
+        \vspace*{1mm}
+        \begin{SRSidebarContent}
+}
+{
+        \ifx\relax\tmpQuoteTwo
+		\sourcenotitle{\tmpQuoteOne}
+	\else
+		\source{\tmpQuoteOne}{\tmpQuoteTwo}
+	\fi
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% Begin Opinion
+\newenvironment{SROpinionBegin}[3]{
+    \renewcommand{\tmpQuoteOne}{#2}
+    \renewcommand{\tmpQuoteTwo}{#3}
+    \ifx\relax#1%
+    \relax\renewcommand{\tmpTitle}{Opinion}%
+    \else\renewcommand{\tmpTitle}{#1}%
+    \fi%
+    \begin{SRSidebarBase}[%
+        frametitle=\SRSidebarTitleContent{images/quote.png}{\tmpTitle},%
+        bottomline=false,
+        skipbelow=0pt,
+        innerbottommargin=0mm,
+        ]
+        \vspace*{1mm}
+        \begin{SRSidebarContent}
+}
+{       
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+%%% End Opinion
+\newenvironment{SROpinionEnd}[3]{
+    \renewcommand{\tmpQuoteOne}{#2}
+    \renewcommand{\tmpQuoteTwo}{#3}
+    \begin{SRSidebarBase}[%
+        topline=false,
+        skipabove=0mm,
+        innertopmargin=0mm,
+        ]
+        \begin{SRSidebarContent}
+}
+{       
+        \ifx\relax\tmpQuoteTwo
+                \sourcenotitle{\tmpQuoteOne}
+        \else
+                \source{\tmpQuoteOne}{\tmpQuoteTwo}
+        \fi
+        \end{SRSidebarContent}
+    \end{SRSidebarBase}
+}
+
+% hyperref should be loaded as last
+% pass option "hyphens" to internally loaded url package
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+
+

@@ -1,0 +1,26 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\usepackage{multirow}
+
+\def\headerbits{0}
+\newcounter{bitcnt}
+\loop\ifnum\thebitcnt<31
+\stepcounter{bitcnt}
+\edef\headerbits{\headerbits & \thebitcnt}
+\repeat
+
+\begin{document}%
+
+\setlength\extrarowheight{10pt}%
+\setlength\arrayrulewidth{1pt}%
+\begin{tabular}{|*{32}{>{\centering\arraybackslash}m{.3cm}|}}
+\headerbits\\[5pt]\hline
+\multicolumn{8}{|c|}{\LARGE Type} & \multicolumn{8}{c|}{\LARGE Length}\\[5pt]\hline
+\multicolumn{8}{|c|}{\LARGE LB Length} &
+\multicolumn{8}{c|}{\LARGE LN Length} &
+\multicolumn{8}{c|}{\LARGE Fun. Length} &
+\multicolumn{8}{c|}{\LARGE Arg. Length}\\[5pt]\hline
+\end{tabular}
+
+\end{document}

@@ -1,0 +1,22 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\usepackage{multirow}
+
+\def\headerbits{0}
+\newcounter{bitcnt}
+\loop\ifnum\thebitcnt<7
+\stepcounter{bitcnt}
+\edef\headerbits{\headerbits & \thebitcnt}
+\repeat
+
+\begin{document}%
+
+\setlength\extrarowheight{10pt}%
+\setlength\arrayrulewidth{1pt}%
+\begin{tabular}{|*{8}{>{\centering\arraybackslash}m{.3cm}|}}
+\headerbits\\[5pt]\hline
+\LARGE B & \LARGE S & \LARGE P & \multicolumn{5}{c|}{\LARGE Reserved}\\[5pt]\hline
+\end{tabular}
+
+\end{document}

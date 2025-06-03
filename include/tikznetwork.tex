@@ -1,0 +1,134 @@
+\ifdefined\tikznetworkIsLoaded
+  % contentr of file has already been included, do nothing
+\else
+  % Define the flag to prevent future inclusions
+  \def\tikznetworkIsLoaded{}
+
+\tikzstyle{basenode}=[circle, draw, outer sep=1pt, fill=white]
+
+%\tikzstyle{router}=[basenode, minimum size=.35cm]
+\tikzstyle{router}=[basenode, minimum size=8mm]
+
+\tikzstyle{bigrtr}=[router, very thick, scale=3] % at scale 3, default thin (0.4pt) becomes very thick (1.2pt)
+\tikzstyle{bigrtr_external}=[bigrtr, draw=gray, text=gray]
+\tikzstyle{bigrtr_transit}=[bigrtr, thin, inner sep=0]
+
+\tikzstyle{connec}=[color=black]
+\tikzstyle{srpath}=[very thick, ->, >=latex]
+\tikzstyle{srpath_alt}=[very thick, dashed]
+
+% very thick = 1.2pt
+% colors in colors.tex
+%\colorlet{col_algo0}{gray}
+%\colorlet{col_algo128}{parBlue}
+%\colorlet{col_algo129}{parGreen}
+%\colorlet{col_TOFIX}{pink}
+
+\tikzstyle{srpath0}=[very thick, col_algo0, >=latex]
+\tikzstyle{srpath0_alt}=[srpath0, dashed]
+%\tikzstyle{srpath0_tilfa}=[very thick, double, black, >=latex]
+\tikzstyle{srpath0_tilfa}=[srpath0, dotted]
+\tikzstyle{srpath0_tilfa_alt}=[srpath0_tilfa, dashed, col_TOFIX]
+\tikzset{squarepost/.style={
+    decoration={
+        markings,
+        mark=between positions 0.1 and 0.9 step 10mm with {
+            \node[shape=rectangle, minimum size=3.6pt, fill=col_algo128, inner sep=0.5pt, transform shape] {};
+        }
+    },
+    postaction={decorate}
+}}
+\tikzset{squaremid/.style={
+    decoration={
+        markings,
+        mark=at position 0.5 with {
+            \node[shape=rectangle, minimum size=3.6pt, fill=col_algo128, inner sep=0.5pt, transform shape] {};
+        }
+    },
+    postaction={decorate}
+}}
+\tikzstyle{srpath128}=[very thick, col_algo128, >=latex]
+\tikzstyle{srpath128_tilfa}=[srpath128, dotted]
+\tikzstyle{srpath128_alt}=[srpath128, dashed, col_TOFIX]
+\tikzset{circlepost/.style={
+    decoration={
+        markings,
+        mark=between positions 2*3.6pt and -2*3.6pt step 10mm with {
+            \node[shape=circle, minimum size=3.6pt, fill=col_algo129, inner sep=0.5pt, transform shape] {};
+        }
+    },
+    postaction={decorate}
+}}
+\tikzset{circlemid/.style={
+    decoration={
+        markings,
+        mark=at position 0.5 with {
+            \node[shape=circle, minimum size=3.6pt, fill=col_algo129, inner sep=0.5pt, transform shape] {};
+        }
+    },
+    postaction={decorate}
+}}
+\tikzstyle{srpath129}=[very thick, col_algo129, >=latex]
+\tikzstyle{srpath129_tilfa}=[srpath129, dotted]
+\tikzstyle{srpath129_alt}=[srpath129, dashed, col_TOFIX]
+
+\tikzstyle{bigarrow}=[->, line width=5mm, color=gray, >={Latex[width=12mm,length=5mm]}]
+
+\tikzstyle{failed_link}=[starburst, inner sep=0cm, starburst points=11, starburst point height=.17cm, minimum width=.7cm, minimum height=.5cm]
+\tikzstyle{failed_router}=[router, starburst, starburst points=11, starburst point height=.3cm, draw=none, inner sep=.05cm]
+
+\tikzset{node distance=2cm}
+
+\tikzstyle{mydomain}=[rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+
+\tikzstyle{cpsession}=[very thick, <->, >=latex]
+\tikzstyle{cpsession_ebgpv4}=[cpsession, EBGPV4, dotted]
+\tikzstyle{cpsession_ibgpv4}=[cpsession, IBGPV4, dotted]
+\tikzstyle{cpsession_ebgpv6}=[cpsession, EBGPV6, dashed]
+\tikzstyle{cpsession_ibgpv6}=[cpsession, IBGPV6, dashed]
+
+\tikzset{bgpupdate/.style={align=left, draw, very thick, fill=white}}
+\tikzset{bgpupdate_ebgpv4/.style={bgpupdate, draw=EBGPV4, dotted}}
+\tikzset{bgpupdate_ibgpv4/.style={bgpupdate, draw=IBGPV4, dotted}}
+\tikzset{bgpupdate_ebgpv6/.style={bgpupdate, draw=EBGPV6, dashed}}
+\tikzset{bgpupdate_ibgpv6/.style={bgpupdate, draw=IBGPV6, dashed}}
+
+%\tikzstyle{cplabel}=[align=center, scale=.6]
+%\tikzstyle{rtrlabel}=[align=center, scale=.6]
+\tikzstyle{cplabel}=[align=center]
+\tikzstyle{rtrlabel}=[align=center]
+
+\tikzstyle{domainnode}=[draw, rectangle, rounded corners=5mm, dashed, very thick]
+%\tikzset{mydomain/.style={rectangle, rounded corners, inner sep=1mm, draw=black, fill=white, thick, dashed}}
+\tikzstyle{domain0}=[domainnode, DOMZERO]
+\tikzstyle{domain1}=[domainnode, DOMONE]
+\tikzstyle{domain2}=[domainnode, DOMTWO]
+
+\tikzset{domainVrf/.style={domainnode, rounded corners=2mm, inner sep=2mm}}
+\tikzstyle{domainVrfGreen}=[domainVrf, VRFGREEN]
+\tikzstyle{domainVrfBlue}=[domainVrf, VRFBLUE, dotted]
+\tikzstyle{domainEVI100}=[domainVrf, EVI100]
+
+\tikzset{VRFBLUEPATTERN/.style={pattern={Dots[angle=45,distance={12pt/sqrt(2)}]}, pattern color=VRFBLUE}}
+
+%\tikzset{trianglepost/.style={
+%    decoration={
+%        markings,
+%        mark=between positions 0.1 and 0.9 step 10mm with {
+%            \node[shape=regular polygon, regular polygon sides=3, minimum size=4pt, fill=green, inner sep=0.5pt, transform shape, rotate=30] {};
+%        }
+%    },
+%    postaction={decorate}
+%}}
+%\tikzset{trianglemid/.style={
+%    decoration={
+%        markings,
+%        mark=at position 0.5 with {
+%            \node[shape=regular polygon, regular polygon sides=3, minimum size=4pt, fill=green, inner sep=0.5pt, transform shape, rotate=30] {};
+%        }
+%    },
+%    postaction={decorate}
+%}}
+
+\fi
+

@@ -1,0 +1,22 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\input{tikznetwork}
+
+\begin{document}%
+    \begin{tikzpicture}
+        % Import base topo
+        \input{topo1}
+
+        % Prefix SID path from 1 to 4
+        \draw[srpath0, ->] ([xshift=2pt, yshift=2pt]1.south east)
+            .. controls ([xshift=3pt, yshift=3pt]3.south west) ..
+            ([xshift=2pt, yshift=2pt]4.north west);
+        \draw[srpath0, ->] ([xshift=-2pt, yshift=-2pt]1.south east)
+            .. controls ([xshift=-3pt, yshift=-3pt]2.north east) ..
+            ([xshift=-2pt, yshift=-2pt]4.north west);
+\pgfsize{\mywidth}{\myheight}
+    \end{tikzpicture}%
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}

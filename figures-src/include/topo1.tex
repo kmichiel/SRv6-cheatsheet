@@ -1,0 +1,14 @@
+% Routers
+\node[router](1){1};
+\node[router, below=of 1](2){2};
+\node[router, right=of 1](3){3};
+\node[router, right=of 2](4){4};
+\node[router, right=of 3](5){5};
+
+% Links between routers
+\draw[connec] (1) -- (2); %node[midway, fill=white]{\scriptsize 1};
+\draw[connec] (1) -- (3); %node[midway, fill=white]{\scriptsize 1};
+\draw[connec] (2) -- (4); %node[midway, fill=white]{\scriptsize 1};
+\draw[connec] (3) -- (4); %node[midway, fill=white]{\scriptsize 1};
+\draw[connec] (3) -- (5); %node[midway, fill=white]{\scriptsize 1};
+\draw[connec] (4) -- (5) node[midway, sloped, fill=white]{\scriptsize 100};

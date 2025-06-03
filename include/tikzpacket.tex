@@ -1,0 +1,139 @@
+\ifdefined\tikzpacketIsLoaded
+  % contentr of file has already been included, do nothing
+\else
+  % Define the flag to prevent future inclusions
+  \def\tikzpacketIsLoaded{}
+
+
+
+\newsavebox{\tableboxa}
+
+\providecommand{\smallpktwidth}{2.5cm}
+\providecommand{\stdpktwidth}{5.1cm}
+\providecommand{\largepktwidth}{5.9cm}
+\providecommand{\xlargepktwidth}{6.6cm}
+
+% color definitions moved to colors.tex
+
+\providecommand{\cbgPayload}{\cellcolor{hdrBgPayload}\color{hdrTxtPayload}}
+\providecommand{\cbgFour}{\cellcolor{hdrBgFour}\color{hdrTxtFour}}
+\providecommand{\cbgSix}{\cellcolor{hdrBgSix}\color{hdrTxtSix}}
+\providecommand{\cbgSixLight}{\cellcolor{hdrBgSixLight}\color{hdrTxtSixLight}}
+\providecommand{\cbgSRH}{\cellcolor{hdrBgSRH}\color{hdrTxtSRH}}
+\providecommand{\cbgSRHLight}{\cellcolor{hdrBgSRHLight}\color{hdrTxtSRHLight}}
+\providecommand{\cbgUDP}{\cellcolor{hdrBgUDP}\color{hdrTxtUDP}}
+
+\NewEnviron{srv6packet}[1][\stdpktwidth]{%
+    \savebox{\tableboxa}{%
+    \setlength\extrarowheight{5pt}%
+    \begin{tabular}{m{1.3cm} m{#1}}
+        \BODY%
+        \multicolumn{2}{c}{\cbgPayload Payload}\\[3pt]
+    \end{tabular}}%
+    \begin{tikzpicture}
+        \begin{scope}
+            \clip[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+            \node at (0,-\dp\tableboxa) [anchor=south west,inner sep=0pt]{\usebox{\tableboxa}};
+        \end{scope}
+        \draw[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+    \end{tikzpicture}
+}
+
+\NewEnviron{srv6packet2}{%
+    \savebox{\tableboxa}{%
+    \setlength\extrarowheight{5pt}%
+    \begin{tabular}{m{1.3cm} m{\stdpktwidth}}
+        \BODY%
+        \multicolumn{2}{c}{\cbgPayload Payload}\\[3pt]
+    \end{tabular}}%
+    \begin{tikzpicture}
+        \begin{scope}
+            \clip[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+            \node at (0,-\dp\tableboxa) [anchor=south west,inner sep=0pt]{\usebox{\tableboxa}};
+        \end{scope}
+        \draw[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+    \end{tikzpicture}
+}
+
+\newcommand{\ipfourhdr}[2]{\cbgFour IPv4 Hdr & (\texttt{#1}, \texttt{#2})\\[3pt]\hline}
+\newcommand{\ipsixhdr}[2]{\cbgSix IPv6 Hdr & (\texttt{#1}, \texttt{#2})\\[3pt]\hline}
+%\newcommand{\srhdr}[2]{\cbgSRH SR Hdr & (#1)\hspace{1cm}SL~=~#2\\[3pt]\hline}
+\newcommand{\srhdr}[2]{\cbgSRH SR Hdr & %
+    \begin{tikzpicture}%
+        \node[align=left, inner xsep=0] (xx) {\vspace{3pt}(#1)\\SL~=~#2};%
+    \end{tikzpicture}\\[3pt]\hline}
+
+\newcommand{\smallipsixpkt}[3][\smallpktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipsixhdr{#2}{#3}%
+    \end{srv6packet}
+}
+
+\newcommand{\ipsixpkt}[3][\stdpktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipsixhdr{#2}{#3}%
+    \end{srv6packet}
+}
+
+\newcommand{\largeipsixpkt}[3][\largepktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipsixhdr{#2}{#3}%
+    \end{srv6packet}
+}
+
+\newcommand{\smallipfourpkt}[3][\smallpktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipfourhdr{#2}{#3}%
+    \end{srv6packet}
+}
+
+\newcommand{\ipfourpkt}[3][\stdpktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipfourhdr{#2}{#3}%
+    \end{srv6packet}
+}
+
+\newcommand{\ipsrhpkt}[5][\stdpktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipsixhdr{#2}{#3}%
+        \srhdr{#4}{#5}%
+    \end{srv6packet}
+}
+
+\newcommand{\ipfourinsixpkt}[5][\stdpktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipsixhdr{#2}{#3}%
+        \ipfourhdr{#4}{#5}%
+    \end{srv6packet}
+}
+
+\newcommand{\largeipfourinsixpkt}[5][\largepktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipsixhdr{#2}{#3}%
+        \ipfourhdr{#4}{#5}%
+    \end{srv6packet}
+}
+
+\newcommand{\xlargeipfourinsixpkt}[5][\xlargepktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipsixhdr{#2}{#3}%
+        \ipfourhdr{#4}{#5}%
+    \end{srv6packet}
+}
+
+\newcommand{\ipsixinsixpkt}[5][\stdpktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipsixhdr{#2}{#3}%
+        \ipsixhdr{#4}{#5}%
+    \end{srv6packet}
+}
+
+\newcommand{\largeipsixinsixpkt}[5][\largepktwidth]{%
+    \begin{srv6packet}[#1]%
+        \ipsixhdr{#2}{#3}%
+        \ipsixhdr{#4}{#5}%
+    \end{srv6packet}
+}
+
+
+\fi

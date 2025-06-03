@@ -1,0 +1,74 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\usepackage{multirow, makecell}
+\input{tikzpacket}
+
+\begin{document}%
+  \begin{tikzpicture}
+    \node(pkta){%
+      \savebox{\tableboxa}{%
+        \setlength\extrarowheight{5pt}%
+        \setlength\arrayrulewidth{1pt}%
+        %\begin{tabular}{m{1.3cm} C{5.1cm}}
+        \begin{tabular}{m{1.8cm} C{3cm} | C{3cm} | C{3cm} | C{3cm}}
+
+          % IPv6 header
+          \cbgSix
+          & Version = 6
+          & Traffic Class
+          & \multicolumn{2}{c}{Flow Label}
+          \\[3pt]\cline{2-5}
+
+          \cbgSix
+          & \multicolumn{2}{c|}{Payload Length}
+          & \textbf{Next Header = 43}
+          & Hop Limit
+          \\[3pt]\cline{2-5}
+
+          \cbgSix
+          & \multicolumn{4}{c}{Source Address}
+          \\[3pt]\cline{2-5}
+
+          \cbgSix\multirowcell{-4}{IPv6\\ Header}
+          & \multicolumn{4}{c}{Destination Address}
+          \\[3pt]\hline
+
+          % Routing header
+          \cbgSRH
+          & \textbf{Next Header = 17}
+          & Header Ext Length
+          & \multicolumn{2}{c}{}
+          \\[3pt]\cline{2-3}
+
+          \cbgSRH\multirowcell{-2}{Routing\\ Ext. Header}
+          & \multicolumn{4}{c}{\textit{header data}}
+          \\[3pt]\hline
+
+          \multicolumn{5}{c}{\cbgUDP UDP Header}\\[3pt]
+          \multicolumn{5}{c}{\cbgPayload Payload}\\[3pt]
+        \end{tabular}%
+      }%
+      \begin{tikzpicture}
+        \begin{scope}
+          \clip[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+          \node at (0,-\dp\tableboxa) [anchor=south west,inner sep=0pt]{\usebox{\tableboxa}};
+        \end{scope}
+        \draw[rounded corners=1ex] (0,-\dp\tableboxa) -- (\wd\tableboxa,-\dp\tableboxa) -- (\wd\tableboxa,\ht\tableboxa) -- (0,\ht\tableboxa) -- cycle;
+%-1+.28
+        \draw (11.98,1.87) node[circle,draw,PKTANNOT, inner sep=5pt, ultra thick](nh1){};
+        \draw (5.07,-.26) node[circle,draw,PKTANNOT, inner sep=5pt, ultra thick](nh2){};
+        %\draw (5.10,-.95) node[circle,draw,PKTANNOT, inner sep=5pt, ultra thick](nh3){};
+        \draw[ultra thick, ->, PKTANNOT, >=latex, dashed] (nh1) to [out=225,in=45] (2, -.15);
+        %\draw[ultra thick, ->, PKTANNOT, >=latex, dashed] (nh2) to [out=225,in=45] (2, -.8);
+        \draw[ultra thick, ->, PKTANNOT, >=latex, dashed] (nh2) to [out=315,in=135] (8, -1.4);
+\pgfsize{\mywidth}{\myheight}
+      \end{tikzpicture}
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+    };
+\pgfsize{\mywidth}{\myheight}
+  \end{tikzpicture}%
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}

@@ -1,0 +1,71 @@
+\input{dofirst}
+\documentclass{standalone}
+%\usepackage{tabularray}
+\input{preamble}
+\input{tikzpacket-newer-sa-da}
+\input{tikznetwork}
+
+\begin{document}%
+    \begin{tikzpicture}
+
+    \usetikzlibrary{math,calc}
+    \node[align=left, opacity=0, anchor=south west] at (0,0) (sample) {SA:~\texttt{fc00:0:1::}};
+    \tikzmath{
+        coordinate \wNode;
+        \wNode1=(sample.east) - (sample.west);
+        \n1= {veclen(\wNodex1,\wNodey1) - \pgflinewidth};
+        \wNode2=(sample.north) - (sample.south);
+        \n2= {veclen(\wNodex2,\wNodey2) - \pgflinewidth};
+    }
+    \def\pktwidth{\n1}
+    \def\pktheight{\n2}
+
+    \tikzset{artr/.style={router}}
+    \tikzset{abigrtr/.style={router, scale=1.5, semithick}} % thin (0.4pt) at scale 1.5 is semithick (0.6pt)
+    \tikzset{albl/.style={font=\Large}}
+
+        \node[abigrtr](2){2};
+        
+        \node[below=.1cm of 2, albl] (label) {End with PSP};
+
+        \node[below=.1cm of label](2b){};
+        \node[anchor=east, minimum width=1cm] at (2b-|2.west)(2bl){};
+        \node[anchor=west, minimum width=1cm] at (2b-|2.east)(2br){};
+
+    % pkt2
+    \node[right=.2cm of 2br.east, anchor=north west](pkt2){\ipsrhpktnew[\pktwidth pt]{\texttt{fc00:0:1::1}}{\texttt{\underline{fc00:0:3::}}}%
+    {(\texttt{fc00:0:4::}, \\\phantom{(}\texttt{fc00:0:3::},\\\phantom{(}\texttt{fc00:0:2::})}%
+    {\underline{1}}};
+    % size of pkt2
+    %\path let \p1=($(pkt2.north east)-(pkt2.south west)$) in  (pkt2.north) node[above=1cm,draw,fill=white] {The node \texttt{pkt2} is \x1\ wide and \y1\ tall.};
+
+    % pkt1
+    \node[left=.2cm of 2bl.west, anchor=south east] at (2bl.west|-pkt2.south) (pkt1){\ipsrhpktnew[\pktwidth pt]{\texttt{fc00:0:1::1}}{\texttt{fc00:0:2::}}%
+    {(\texttt{fc00:0:4::}, \\\phantom{(}\texttt{fc00:0:3::},\\\phantom{(}\texttt{fc00:0:2::})}%
+    {2}};
+    % size of pkt1
+    %\path let \p1=($(pkt1.north east)-(pkt1.south west)$) in  (pkt1.north) node[above=1cm,draw,fill=white] {The node \texttt{pkt1} is \x1\ wide and \y1\ tall.};
+        
+    \node[anchor=east, minimum width=1cm] at (pkt1-|2.west)(2bl){};
+    \node[anchor=west, minimum width=1cm] at (pkt1-|2.east)(2br){};
+
+    \draw[bigarrow] (2bl.west) -- (2bl.east);
+    \draw[bigarrow] (2br.west) -- (2br.east);
+
+
+    \node[artr, anchor=west] at (2-|pkt1.west) (1) {1};
+    \node[artr, anchor=east] at (2-|pkt2.east) (4) {4};
+    \node[artr] at ($(2)!0.8!(4)$) (3) {3};
+    
+    \draw[connec, dashed] (2) -- (1);
+    \draw[connec, dashed] (2) -- (3);
+    \draw[connec, dashed] (3) -- (4);
+
+    \pgfsize{\mywidth}{\myheight}
+\end{tikzpicture}
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}
+
+
+

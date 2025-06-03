@@ -1,0 +1,149 @@
+\hypertarget{chap:preface}{%
+\chapter{Preface}\label{chap:preface}}
+
+This book is the third part of the series about \emph{Segment Routing (SR)}.
+
+In the ever-evolving landscape of network engineering, staying ahead of the curve is not just an advantage; it's a necessity. This book, the third installment of the Segment Routing series, is the definitive textbook for engineers and IT professionals ready to master the latest revolution in networking technology: SRv6.
+
+SRv6 emerges as the key enabler of a new era of networking. Integrating the Segment Routing functionalities with the native capabilities of IPv6 to create a self-sufficient solution. This powerful synergy unlocks possibilities for increased network efficiency, enhanced control, and greater versatility, which are critical in modern networking environments.
+
+The SRv6 integration enables ``IPv6 for Any Service Anywhere''. Eliminating the additional protocol layers (MPLS, VxLAN, NSH) allows for building any service (TDM, VPN, slicing, Traffic Engineering, Green routing, FRR, NFV, etc.) end-to-end, across any domain (Access, Metro, Core, DC, Cloud, Host). While offering a universal solution, SRv6 outperforms all the current market-specific solutions across the board.
+
+Hardware optimizations ensure line-rate performance across various hardware platforms. By leveraging the highly optimized longest-prefix match, network programs are embedded in the IPv6 destination address, providing ultimate simplicity for engineering service traffic.
+
+This does not result in huge packet headers; on the contrary, SRv6 uSIDs provide the smallest MTU overhead. Only the base IPv6 header is required to engineer packet flows through the stateless network fabric; the use of a Segment Routing Header (SRH) is seldom necessary.
+
+As a backward-compatible integrated IPv6 solution, SRv6 is seamlessly deployable in brownfield networks.
+
+SRv6 is an ultra-scalable solution that enhances both network and service scalability. Owing to the simplified network stack, prefix summarization is feasible again, while maintaining end-to-end Traffic Engineering capability.
+
+SRv6 is not only simple, performant, and scalable; it is versatile as well. With the network programming paradigm, it provides flexible design options suitable for a wide array of network deployments, from defense to enterprise to service providers to hyperscalers.
+
+The SRv6 solution is standardized with wide industry support and a rich eco-system including a rich open-source community.
+
+SRv6 establishes a solid foundation for the continuous growth and integration of next-generation network innovations. This positions networks to be agile, scalable, and ready for the burgeoning demands of future data transmission and communication needs.
+
+In this book, you will discover:
+
+\begin{itemize}
+\item
+  An introduction to SRv6, defining its role in the future of networking.
+\item
+  Detailed explanations of the SRv6 architecture, including its components and how it integrates with and enhances IPv6 networks.
+\item
+  Clear explanations of SRv6 operations, including network programming, packet forwarding mechanics, and service chaining.
+\item
+  Insights into SRv6 deployment scenarios, enabling services to use SRv6 transport and steering over user-defined algorithmic paths leveraging Flex-Algo.
+\item
+  Showcasing how SRv6 provides network resiliency using TI-LFA, micro-loop avoidance, and BGP Prefix-Independent Convergence (PIC).
+\item
+  Best practices for implementing and optimizing SRv6, ensuring you can maximize performance and reliability.
+\item
+  Case studies of real-world SRv6 deployments.
+\end{itemize}
+
+While you can read this book independently from the previous books in the series, it assumes a basic understanding of Segment Routing functionalities. Whether you're a seasoned network professional or new to the field, ``Segment Routing Part III --- SRv6'' is your key to unlocking the full potential of your networking career. Embrace the future of networking with the knowledge and skills to deploy, manage, and innovate with SRv6. ``Segment Routing Part III --- SRv6'' is more than a textbook; it's a gateway to future-proofing your networking skills. Your journey toward networking excellence begins here.
+
+\section*{Audience}
+
+We have tried to make this book accessible to a wide audience and to address beginner, intermediate and advanced topics. We hope it will be of value to anyone trying to design, support or just understand SRv6 from a practical perspective. This includes network designers, engineers, administrators, and operators, both in service provider and enterprise environments, as well as other professionals or students looking to gain an understanding of SRv6.
+
+We have assumed that readers are familiar with data networking in general, and with the concepts of IP, IP routing, and MPLS, in particular. There are many good books available on these subjects.
+
+We have also assumed that readers know the basics of Segment Routing. Parts I and II of this SR book series (available on amazon.com) are great resources to learn the SR fundamentals.
+
+\section*{Disclaimer}
+
+This book only reflects the opinion of the authors and not the company they work for. Every statement made in this book is a conclusion drawn from personal research by the authors and lab tests.
+
+%\pagebreak
+
+Also consider the following:
+
+\begin{itemize}
+\item
+  Some examples have been built with prototype images. It is possible that at the time of publication, some functions and commands are not yet generally available. Cisco Systems does not commit to release any of the features described in this book. For some functionalities this is indicated in the text, but not for all. On the bright side: this book provides a sneak preview to the state-of-the-art and you have the opportunity to get a taste of the things that may be coming.
+\item
+  It is possible that some of the commands used in this book will be changed or become obsolete in the future. Syntax accuracy is not guaranteed.
+\item
+  For illustrative purposes, the authors took the liberty to edit some of the command output examples, e.g.,~by removing parts of the text. For this reason, the examples in this book have no guaranteed accuracy.
+\end{itemize}
+
+\section*{Reviewers}
+
+Many people have contributed to this book and they are acknowledged in the Introduction chapter. To deliver a book that is accurate, clear, and enjoyable to read, it needs many eyes, other that the eyes of the authors.
+
+Here we would like to specifically thank the people that have reviewed this book in its various stages towards completion. Without them this book would not have been at the level it is now. A sincere ``\textbf{Thank you!}'' to all.
+
+In alphabetical order:
+
+Luc André, Sonia Ben Ayed, Daniel Bernier, Jason Bulpin, Hernan Contreras, Bruno Decraene, Florian Deragisch, Mike DiVincenzo, Jens Fallesen, Frank Geldner, Jan Gerbecks, Martin Gysi, Cris He, Roy Jiang, Teppei Kamata, Alexei Kiritchenko, Humberto La Roche, Linh Ahn Le, Nic Leymann, Jiaming Li, Bryan Loh, Eugene McCall, Bruce McDougall, Willy Meier, Brendon Mifsud, Mounir Mohamed, Peter Psenak, Gajendra Rathore, Harold Ritter, Evan Rose, Rolf Schmid, David Smith, Grant Socal, Dirk Steinberg, Yuanchao Su, Alex Vassiliadis, and Daniel Voyer.
+
+\pagebreak
+\section*{Text Boxes}
+
+This book has multiple flows:
+
+\begin{itemize}
+\item
+  General flow: This is the regular flow of content that a reader wanting to learn SR would follow. It contains facts, no opinions and is objective in nature.
+\item
+  Highlights: Highlight boxes emphasize important elements and topics for the reader. These are presented in a ``highlight'' box.
+\end{itemize}
+
+\begin{SRHighlight}{}{}
+
+This is an example of a highlight.
+
+\end{SRHighlight}
+
+\begin{itemize}
+\tightlist
+\item
+  Opinions: This content expresses opinions, choices and tradeoffs. This content is not necessary to understand SR, but gives some more background to the interested reader and is presented as quotes. We have also invited colleagues in the industry who have been very active on the SR project to share their opinions on SR in general or some specific aspects. The name of the person providing that opinion is indicated in each quote box.
+\end{itemize}
+
+\begin{SROpinion}{}{John Doe}{}
+
+This is an example opinion.
+
+\end{SROpinion} %%% Author = John Doe
+
+\begin{itemize}
+\tightlist
+\item
+  Reminders: The reminders briefly explain technological aspects (mostly outside of SR) that may help understanding the general flow. They are presented in a ``reminder'' box.
+\end{itemize}
+
+\begin{SRReminder}{}{}
+
+This is an example reminder
+
+\end{SRReminder}
+
+%\section*{Illustrations and Examples Conventions}
+%
+%XXX TODO ?
+%
+%The illustrations and examples in this book follow the following conventions:
+%
+%\begin{itemize}
+%\item
+%  Router-id of Node\emph{X} is 1.1.1.\emph{X}. Other loopbacks have address 1.1.\emph{n}.\emph{X}, with \emph{n} an index.
+%\item
+%  Interface IPv4 address of an interface on Node\emph{X} connected to Node\emph{Y} is 99.\emph{X}.\emph{Y}.\emph{X}/24, with \emph{X}\textless{}\emph{Y}. E.g. a link connecting Node2 to Node3 has a network address 99.2.3.0/24; the interface address on Node2 is 99.2.3.2 and on Node3 it is 99.2.3.3.
+%\item
+%  Prefix-SIDs are labels in the range 16000 to 23999. This is the default Segment Routing Global Block (SRGB) in Cisco devices.
+%\item
+%  Explicit local SIDs are labels in the range {[}15000-15999{]}. This is the default Segment Routing Local Block (SRLB) in Cisco devices.
+%\item
+%  Dynamic Adjacency-SIDs are labels in the {[}24000-24999{]} range and have the format 240\emph{XY} for an adjacency on \emph{X} going to \emph{Y}.
+%\item
+%  Dynamic Binding-SIDs are labels in the range {[}40000-40999{]}.
+%\item
+%  Dynamic BGP EPE Peering-SIDs are labels in the range {[}50000-50999{]}.
+%\item
+%  Dynamic labels allocated by other (non-SR) MPLS applications such as LDP, RSVP-TE, BGP-LU, etc., are in the range {[}90000-99999{]}.
+%\item
+%  SID lists are written as <S\textsubscript{1}, S\textsubscript{2}, S\textsubscript{3}>, ordered first to last, i.e., top to bottom for the SR MPLS label stack.
+%\end{itemize}

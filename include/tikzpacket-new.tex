@@ -1,0 +1,334 @@
+\iffalse %%%%%%%% remove from doc
+\documentclass{standalone}
+\usepackage{tikz}
+
+%\usepackage[scaled]{helvet}
+%\renewcommand\familydefault{\sfdefault}
+%\usepackage[scaled]{FiraMono}
+\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+%\setmonofont{consola.ttf}
+\setmonofont{Inconsolata}
+%SourceSansPro
+\usepackage[default]{sourcesanspro}
+
+\begin{document}
+
+\begin{tikzpicture}
+    \usetikzlibrary{fit}
+
+    % \node[packet] at (1,1) (pkt){\ipfourinsixpkt{\texttt{(aaaa::1,}\\\texttt{ bbbb::1, cccc::1)}}{\texttt{(a.a.a.a,}\\\texttt{ b.b.b.b, c.c.c.c)}}};
+% from parula color scheme
+\definecolor{parDarkBlue}{HTML}{3d26a8}
+\definecolor{parBlue}{HTML}{4757f7}
+\definecolor{parLightBlue}{HTML}{2796eb}
+\definecolor{parGreenBlue}{HTML}{18bfb5}
+\definecolor{parGreen}{HTML}{80cb58}
+\definecolor{parOrange}{HTML}{fdbd3c}
+\definecolor{parYellow}{HTML}{f9fa14}
+
+\colorlet{hdrBgSix}{parLightBlue!20}
+%\colorlet{hdrBgSixLight}{parLightBlue!10}
+\colorlet{hdrBgSixLight}{white}
+\colorlet{hdrBgFour}{parGreen!20}
+%\colorlet{hdrBgFourLight}{parGreen!10}
+\colorlet{hdrBgFourLight}{white}
+\colorlet{hdrBgSRH}{parOrange!20}
+\colorlet{hdrBgSRHLight}{parOrange!20}
+\colorlet{hdrBgUDP}{parGreenBlue!20}
+\colorlet{hdrBgPayload}{gray}
+\colorlet{hdrTxtSix}{black}
+\colorlet{hdrTxtSixLight}{black}
+\colorlet{hdrTxtFour}{black}
+\colorlet{hdrTxtFourLight}{black}
+\colorlet{hdrTxtSRH}{black}
+\colorlet{hdrTxtSRHLight}{black}
+\colorlet{hdrTxtUDP}{black}
+\colorlet{hdrTxtPayload}{white}
+
+\fi %%%%%%%%%%%%%%%%%%
+
+\newcommand\DrawOneLayerPacket[8][(0,0)]{%
+% 1: coordinate
+% 2: name
+% 3: content1 -- IPv6
+% 4: content2 -- IPv4
+% 5: title 1 -- IPv6 Hdr
+% 6: bgcolorleft 1 -- hdrBgSix
+% 7: title 2 -- IPv4 Hdr
+% 8: bgcolorleft 2 -- hdrBgFour
+
+    \def\minwidthleft{1.5cm}
+    \def\minwidthright{2cm}
+    \def\minheight{1cm}
+    \def\linethickness{semithick}
+    \pgfdeclarelayer{mybackground}
+    \pgfsetlayers{mybackground,main}
+
+% line thicknesses
+% ultra thin: 0.1 pt
+% very thin: 0.2 pt
+% thin (default): 0.4 pt
+% semithick: 0.6 pt
+% thick: 0.8 pt
+% very thick: 1.2 pt
+% ultra thick: 1.6 pt
+
+\begin{scope}[shift={(#1)}]
+
+    % row 3 -- payload
+    % left column content
+    \node[draw=none, text opacity=0, fill=none, anchor=south west] at (0,0) (row3a) {Payload};
+
+    % row 1 -- IPv6
+    % transparent text helper
+    \node[draw=none, text opacity=0, minimum width=\minwidthleft, fill=none, anchor=south west] at (row3a.north west) (row11) {#5};
+    % right column content
+    \node[draw=none, text opacity=0, minimum width=\minwidthright, fill=none, anchor=south west, align=left] at (row11.south east) (row12) {#3};
+    \node[draw=none, fill=none, anchor=west, align=left, text=hdrTxtSixLight] at (row12.west) (row12x) {#3};
+    % left column content
+    \node[draw=none, minimum width=\minwidthleft, fill=none, text=hdrTxtSix] at (row11|-row12) (row11b) {#5};
+    % row rectangle
+    \node[draw=none, fit=(row11.north west) (row11.south west)(row12.north east) (row12.south east), inner sep=0, outer sep=0] (row1) {};
+
+    \node[draw=none, fit=(row1.west|-row3a.center) (row1.east|-row3a.center) (row3a.north) (row3a.south), inner sep=0, outer sep=0] (row3) {};
+    \node[draw=none, fit=(row3.north east|-row1.north east) (row3.south west|-row1.south west), inner sep=0, outer sep=0] (row1) {};
+
+%\iffalse
+    %\pgfonlayer{mybackground}
+    % helper nodes
+        % row 1 background fill
+        \node[draw=none, fit=(row1.north west) (row1.south) (row11.east), fill=none, inner sep=0, outer sep=0] (bgd1left) {};
+        \node[draw=none, fit=(row1.north east) (row1.south) (row11.east), fill=none, inner sep=0, outer sep=0] (bgd1right) {};
+
+        % row 3 background fill
+        \node[draw=none, fit=(row3.north west) (row3.south east), fill=none, inner sep=0, outer sep=0] (bgd3) {};
+    %\endpgfonlayer
+%\fi
+    % row 3 content
+    \node[draw=none, anchor=north, text=hdrTxtPayload] at (row3.north) (row3b) {Payload};
+
+    \node[draw=none, rounded corners, fit=(bgd1left.north west) (bgd1left.south west) (bgd3.south west) (bgd3.south east), inner sep=0, outer sep=0] (packet) {};
+
+    %\pgfonlayer{mybackground}
+    \begin{scope}
+        \clip (packet.north west) [rounded corners] -- (packet.north east) [rounded corners] -- (packet.south east) [rounded corners] -- (packet.south west) [rounded corners] -- cycle;
+
+        % row 1 background fill -- IPv6
+        \node[draw=none, fit=(row1.north west) (row1.south) (row11.east), fill=#6, inner sep=0, outer sep=0] (bgd1left) {};
+        \node[draw=none, fit=(row1.north east) (row1.south) (row11.east), fill=hdrBgSixLight, inner sep=0, outer sep=0] (bgd1right) {};
+
+        % row 2 background fill -- IPv4
+        %\node[draw=none, fit=(row2.north west) (row2.south) (row21.east) (row11.east|-row21.east), fill=#8, inner sep=0, outer sep=0] (bgd2left) {};
+        %\node[draw=none, fit=(row2.north east) (row1.east|-row2.east)(row2.south) (row21.east), fill=hdrBgFourLight, inner sep=0, outer sep=0] (bgd2right) {};
+
+        % row 3 background fill -- payload
+        \node[draw=none, fit=(row3.north west) (row3.south east), fill=hdrBgPayload, inner sep=0, outer sep=0] (bgd3) {};
+    \end{scope}
+    %\endpgfonlayer
+    % external referable node
+    \node[draw, rounded corners, fit=(packet.north west) (packet.south east), inner sep=0, outer sep=0, \linethickness] (#2) {};
+    \draw[\linethickness] (bgd3.north west) -- (bgd3.north east);
+
+    \node[draw=none, fill=none, anchor=west, align=left, text=hdrTxtSixLight] at (row12.west) (row12x) {#3};
+    \node[draw=none, anchor=north, text=hdrTxtPayload] at (row3.north) (row3b) {Payload};
+    \node[draw=none, minimum width=\minwidthleft, fill=none, text=hdrTxtSix] at (row11|-row12) (row11b) {#5};
+
+\end{scope}
+}
+
+\newcommand\DrawTwoLayerPacket[8][(0,0)]{%
+% 1: coordinate
+% 2: name
+% 3: content1 -- IPv6
+% 4: content2 -- IPv4
+% 5: title 1 -- IPv6 Hdr
+% 6: bgcolorleft 1 -- hdrBgSix
+% 7: title 2 -- IPv4 Hdr
+% 8: bgcolorleft 2 -- hdrBgFour
+
+    \def\minwidthleft{1.5cm}
+    \def\minwidthright{3cm}
+    \def\minheight{1cm}
+    \def\linethickness{semithick}
+    \pgfdeclarelayer{mybackground}
+    \pgfsetlayers{mybackground,main}
+
+% line thicknesses
+% ultra thin: 0.1 pt
+% very thin: 0.2 pt
+% thin (default): 0.4 pt
+% semithick: 0.6 pt
+% thick: 0.8 pt
+% very thick: 1.2 pt
+% ultra thick: 1.6 pt
+
+\begin{scope}[shift={(#1)}]
+
+    % row 3 -- payload
+    % left column content
+    \node[draw=none, text opacity=0, fill=none, anchor=south west] at (0,0) (row3a) {Payload};
+
+    % row 2 -- IPv4 / SRH
+    % transparent text helper
+    \node[draw=none, text opacity=0, minimum width=\minwidthleft, fill=none, anchor=south west] at (row3a.north west) (row21) {#7};
+    % determine the width of the left column
+    \node[draw=none, text opacity=0, minimum width=\minwidthleft, fill=none, anchor=south west] at (row21.north west) (row11q) {#5};
+    % align row 2 to row 1
+    \node[draw=none, fill=none, fit=(row21.south west) (row21.north east) (row11q.west|-row21.west) (row11q.east|-row21.east), inner sep=0, outer sep=0] (row21) {};
+
+    % right column content
+    \node[draw=none, text opacity=0, minimum width=\minwidthright, fill=none, anchor=south west, align=left, text=hdrTxtFourLight] at (row21.south east) (row22) {#4};
+    % row rectangle
+    \node[draw=none, fit=(row21.north west) (row21.south west)(row22.north east) (row22.south east), inner sep=0, outer sep=0] (row2) {};
+
+    % row 1 -- IPv6
+    % transparent text helper
+    \node[draw=none, text opacity=0, minimum width=\minwidthleft, fill=none, anchor=south west] at (row2.north west) (row11) {#5};
+    % horizontally align with row 2 left
+    % align row 1 to row 2
+    \node[draw=none, fill=none, fit=(row11.south west) (row11.north east) (row21.west|-row11.west) (row21.east|-row11.east), inner sep=0, outer sep=0] (row11) {};    
+    % right column content
+    \node[draw=none, text opacity=0, minimum width=\minwidthright, fill=none, anchor=south west, align=left] at (row11.south east) (row12) {#3};
+    \node[draw=none, fill=none, anchor=west, align=left, text=hdrTxtSixLight] at (row12.west) (row12x) {#3};
+    % left column content
+    \node[draw=none, minimum width=\minwidthleft, fill=none, text=hdrTxtSix] at (row11|-row12) (row11b) {#5};
+    % row rectangle
+    \node[draw=none, fit=(row11.north west) (row11.south west)(row12.north east) (row12.south east), inner sep=0, outer sep=0] (row1) {};
+
+    \node[draw=none, fit=(row2.west|-row3a.center) (row2.east|-row3a.center) (row1.west|-row3a.center) (row1.east|-row3a.center) (row3a.north) (row3a.south), inner sep=0, outer sep=0] (row3) {};
+    \node[draw=none, fit=(row2.north east|-row1.north east) (row2.south west|-row1.south west) (row3.north east|-row1.north east) (row3.south west|-row1.south west), inner sep=0, outer sep=0] (row1) {};
+    \node[draw=none, fit=(row1.north east|-row2.north east) (row1.south west|-row2.south west) (row3.north east|-row2.north east) (row3.south west|-row2.south west), inner sep=0, outer sep=0] (row2) {};
+
+    \node[draw=none, fill=none, anchor=north west, align=left] at (row12.south west) (row22x) {#4};
+    % left column content
+    \node[draw=none, minimum width=\minwidthleft, fill=none, anchor=west, text=hdrTxtFour] at (row21.west|-row22) (row21b) {#7};
+
+%\iffalse
+    %\pgfonlayer{mybackground}
+    % helper nodes
+        % row 1 background fill
+        \node[draw=none, fit=(row1.north west) (row1.south) (row11.east) (row21.east|-row11.east), fill=none, inner sep=0, outer sep=0] (bgd1left) {};
+        \node[draw=none, fit=(row1.north east) (row2.east|-row1.east) (row1.south) (row11.east), fill=none, inner sep=0, outer sep=0] (bgd1right) {};
+
+        % row 2 background fill
+        \node[draw=none, fit=(row2.north west) (row2.south) (row21.east) (row11.east|-row21.east), fill=none, inner sep=0, outer sep=0] (bgd2left) {};
+        \node[draw=none, fit=(row2.north east) (row1.east|-row2.east)(row2.south) (row21.east), fill=none, inner sep=0, outer sep=0] (bgd2right) {};
+
+        % row 3 background fill
+        \node[draw=none, fit=(row3.north west) (row3.south east), fill=none, inner sep=0, outer sep=0] (bgd3) {};
+    %\endpgfonlayer
+%\fi
+    % row 3 content
+    \node[draw=none, anchor=north, text=hdrTxtPayload] at (row3.north) (row3b) {Payload};
+
+    \node[draw=none, rounded corners, fit=(bgd1left.north west) (bgd1left.south west) (bgd2right.north east) (bgd2right.south east) (bgd3.south west) (bgd3.south east), inner sep=0, outer sep=0] (packet) {};
+
+    %\pgfonlayer{mybackground}
+    \begin{scope}
+        \clip (packet.north west) [rounded corners] -- (packet.north east) [rounded corners] -- (packet.south east) [rounded corners] -- (packet.south west) [rounded corners] -- cycle;
+
+        % row 1 background fill -- IPv6
+        \node[draw=none, fit=(row1.north west) (row1.south) (row11.east) (row21.east|-row11.east), fill=#6, inner sep=0, outer sep=0] (bgd1left) {};
+        \node[draw=none, fit=(row1.north east) (row2.east|-row1.east) (row1.south) (row11.east), fill=hdrBgSixLight, inner sep=0, outer sep=0] (bgd1right) {};
+
+        % row 2 background fill -- IPv4
+        \node[draw=none, fit=(row2.north west) (row2.south) (row21.east) (row11.east|-row21.east), fill=#8, inner sep=0, outer sep=0] 
+        (bgd2left) {};
+        \node[draw=none, fit=(row2.north east) (row1.east|-row2.east)(row2.south) (row21.east), fill=hdrBgFourLight, inner sep=0, outer sep=0] (bgd2right) {};
+
+        % row 3 background fill -- payload
+        \node[draw=none, fit=(row3.north west) (row3.south east), fill=hdrBgPayload, inner sep=0, outer sep=0] (bgd3) {};
+    \end{scope}
+    %\endpgfonlayer
+    % external referable node
+    \node[draw, rounded corners, fit=(packet.north west) (packet.south east), inner sep=0, outer sep=0, \linethickness] (#2) {};
+    \draw[\linethickness] (bgd2left.north west) -- (bgd2right.north east);
+    \draw[\linethickness] (bgd3.north west) -- (bgd3.north east);
+
+    \node[draw=none, fill=none, anchor=west, align=left, text=hdrTxtSixLight] at (row12.west) (row12x) {#3};
+    \node[draw=none, minimum width=\minwidthleft, fill=none, text=hdrTxtSix] at (row11|-row12) (row11b) {#5};
+    \node[draw=none, fill=none, anchor=north west, align=left] at (row12.south west) (row22x) {#4};
+    \node[draw=none, minimum width=\minwidthleft, fill=none, anchor=west, text=hdrTxtFour] at (row21.west|-row22) (row21b) {#7};
+    \node[draw=none, anchor=north, text=hdrTxtPayload] at (row3.north) (row3b) {Payload};
+
+\end{scope}
+}
+
+\newcommand\DrawFourInSixPacket[4][(0,0)]{%
+% 1: coordinate
+% 2: name
+% 3: content1 -- IPv6
+% 4: content2 -- IPv4
+% 5: title 1 -- IPv6 Hdr
+% 6: bgcolorleft 1 -- hdrBgSix
+% 7: title 2 -- IPv4 Hdr
+% 8: bgcolorleft 2 -- hdrBgFour
+    \DrawTwoLayerPacket[#1]{#2}{#3}{#4}{IPv6 Hdr}{hdrBgSix}{IPv4 Hdr}{hdrBgFour}
+}
+
+\newcommand\DrawFourPacket[4][(0,0)]{%
+% 1: coordinate
+% 2: name
+% 3: content1 -- IPv6
+% 4: content2 -- IPv4
+% 5: title 1 -- IPv6 Hdr
+% 6: bgcolorleft 1 -- hdrBgSix
+% 7: title 2 -- IPv4 Hdr
+% 8: bgcolorleft 2 -- hdrBgFour
+    \DrawOneLayerPacket[#1]{#2}{#3}{}{IPv4 Hdr}{hdrBgFour}{}{}
+}
+
+\newcommand\DrawSixPacket[4][(0,0)]{%
+% 1: coordinate
+% 2: name
+% 3: content1 -- IPv6
+% 4: content2 -- IPv4
+% 5: title 1 -- IPv6 Hdr
+% 6: bgcolorleft 1 -- hdrBgSix
+% 7: title 2 -- IPv4 Hdr
+% 8: bgcolorleft 2 -- hdrBgFour
+    \DrawOneLayerPacket[#1]{#2}{#3}{}{IPv6 Hdr}{hdrBgSix}{}{}
+}
+
+\newcommand\DrawSixInSixPacket[4][(0,0)]{%
+% 1: coordinate
+% 2: name
+% 3: content1 -- IPv6
+% 4: content2 -- IPv6
+% 5: title 1 -- IPv6 Hdr
+% 6: bgcolorleft 1 -- hdrBgSix
+% 7: title 2 -- IPv6 Hdr
+% 8: bgcolorleft 2 -- hdrBgSix
+    \DrawTwoLayerPacket[#1]{#2}{#3}{#4}{IPv6 Hdr}{hdrBgSix}{IPv6 Hdr}{hdrBgSix}
+}
+
+\newcommand\DrawSixSRHPacket[4][(0,0)]{%
+% 1: coordinate
+% 2: name
+% 3: content1 -- IPv6
+% 4: content2 -- SRH
+% 5: title 1 -- IPv6 Hdr
+% 6: bgcolorleft 1 -- hdrBgSix
+% 7: title 2 -- SRH
+% 8: bgcolorleft 2 -- hdrBgSRH
+    \DrawTwoLayerPacket[#1]{#2}{#3}{#4}{IPv6 Hdr}{hdrBgSix}{SR Hdr}{hdrBgSRH}
+}
+
+%\DrawFourInSixPacket[(0,0)]{aha}{\texttt{(0000::1, bbbb::1, cccc::1)}}{\texttt{(a.a.a.a,}\\\texttt{ b.b.b.b, c.c.c.c)}};
+
+%\DrawSixInSixPacket[(0,-2.5)]{ihi}{\texttt{(aaaa::1,}\\\texttt{ bbbb::1, cccc::1)}}{\texttt{(a.a.a.a, b.b.b.b, c.c.c.c)}};
+%\draw[] (aha) -- (ihi);
+
+%\DrawSixSRHPacket[(0,-5)]{oho}{\texttt{(aaaa::1, bbbb::1, cccc::1)}}{\texttt{(a.a.a.a, b.b.b.b, c.c.c.c, d.d.d.d)}};
+
+%\DrawFourInSixPacket[(0,-7.5)]{aha}{\texttt{(0000::1, bbbb::1, cccc::1)}}{\texttt{(b.b.b.b, c.c.c.c)}};
+
+%\node[blue] (q) at (0,0) {X};
+
+\iffalse %%%%%%%%%%%%%%%% remove from doc
+\end{tikzpicture}
+
+\end{document}
+\fi %%%%%%%%%%%%%%
+

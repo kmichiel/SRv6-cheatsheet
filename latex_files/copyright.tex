@@ -1,0 +1,99 @@
+% vi: set encoding=utf-8:
+% vim: set encoding=utf-8:
+
+\frontmatter
+\pagestyle{empty}
+%%% raggedright footnotes
+%\renewcommand{\@makefntext}[1]{\makefootmark\raggedright##1}}
+
+%%%%%%% begin insert from memoir manual
+% half-title page
+\vspace*{\fill}
+%%\begin{adjustwidth}{1in}{1in}
+\begin{center}
+\HUGE\sffamily Segment Routing\par
+Part III -- SRv6
+\end{center}
+%%\end{adjustwidth}
+\vspace*{\fill}
+\cleardoublepage
+
+\newlength\drop
+\begingroup% Gentle Madness
+\drop = 0.1\textheight
+
+% title page
+\vspace*{\drop}
+\begin{center}
+\HUGE\textsf{Segment Routing}\par
+\end{center}
+\begin{center}
+\HUGE\textsf{Part III -- SRv6}\par
+\end{center}
+\bigskip
+\begin{center}
+\LARGE\textsf{Clarence Filsfils}\par
+\LARGE\textsf{Ahmed Abdelsalam}\par
+\LARGE\textsf{Pablo Camarillo}\par
+\LARGE\textsf{François Clad}\par
+\LARGE\textsf{Kris Michielsen}\par
+\end{center}
+\endgroup
+%%%%%%% end insert
+
+%\author{Clarence Filsfils, Kris Michielsen, François Clad}
+%\title{Segment Routing, Part II}
+%\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\chapter*{Copyright}
+%\label{copyright}
+%\pagestyle{ruled} % activate pagestyle for TOC, ...
+%\addcontentsline{toc}{chapter}{Copyright}
+%\markboth{Copyright}{Copyright}
+\clearpage
+\thispagestyle{empty}
+\begingroup\footnotesize
+Segment Routing Part III -- SRv6
+
+by Clarence Filsfils, Ahmed Abdelsalam, Pablo Camarillo, François Clad, Kris Michielsen
+
+
+Copyright © 2024 Cisco Systems, Inc.
+
+All rights reserved. No part of this book may be reproduced, distributed, or transmitted in any form or by any means, electronic or mechanical, including photocopying, recording, or by any information storage and retrieval system, without written permission from the publisher or author, except for the inclusion of brief quotations in a review.
+
+Paperback Edition v1.0, November 2024
+
+%\section*{Warning and Disclaimer}
+%\label{warning-and-disclaimer}
+\vspace*{0.5\baselineskip}
+{\sffamily\small Warning and Disclaimer}\par
+Every effort has been made to make this book as complete and as accurate as possible, but no warranty or fitness is implied.
+
+The information is provided on an “as is” basis. The publisher and authors shall have neither liability nor responsibility to any person or entity with respect to any loss or damages arising from the information contained in this book.
+
+The views and opinions expressed in this book belong to the authors or to the person who is quoted.
+
+%\section*{Trademark Acknowledgments}
+%\label{_trademark_acknowledgments}
+\vspace*{0.5\baselineskip}
+{\sffamily\small Trademark Acknowledgments}\par
+Cisco and the Cisco logo are trademarks or registered trademarks of Cisco and/or its affiliates in the U.S. and other countries. To view a list of Cisco trademarks, go to this URL: www.cisco.com/go/trademarks. Third-party trademarks mentioned are the property of their respective owners. The use of the word partner does not imply a partnership relationship between Cisco and any other company. (1110R)
+
+All terms mentioned in this book that are known to be trademarks or service marks have been appropriately capitalized. The authors cannot attest to the accuracy of this information. Use of a term in this book should not be regarded as affecting the validity of any trademark or service mark.
+
+%\section*{Feedback Information}
+%\label{_feedback_information}
+% commented out for cisco edition
+\vspace*{0.5\baselineskip}
+%{\sffamily\small Feedback Information}\par
+%The authors' goal is to create an in-depth technical book of the highest quality and value. It is crafted with care and precision, undergoing rigorous development that involves the unique expertise of members from the professional technical community.
+%
+%Readers’ feedback is a natural continuation of this process. If you have any comments regarding how we could improve the quality of this book, or otherwise alter it to better suit your needs, you can contact us via the blog \href{http://segment-routing-book.blogspot.com}{http://segment-routing-book.blogspot.com} or via email at \href{mailto:segment-routing-book@googlegroups.com}{segment-routing-book@googlegroups.com}. Please make sure to include the book title in your message.
+%
+%We greatly appreciate your assistance.
+%
+\endgroup
+

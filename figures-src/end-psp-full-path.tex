@@ -1,0 +1,118 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\input{tikzpacket-newer-sa-da}
+\input{tikznetwork}
+
+\begin{document}%
+    \begin{tikzpicture}
+
+    \usetikzlibrary{math,calc}
+    \node[align=left, opacity=0, anchor=south west] at (0,0) (sample) {SA:~\texttt{fc00:0:1::}};
+    \tikzmath{
+        coordinate \wNode;
+        \wNode1=(sample.east) - (sample.west);
+        \n1= {veclen(\wNodex1,\wNodey1) - \pgflinewidth};
+        \wNode2=(sample.north) - (sample.south);
+        \n2= {veclen(\wNodex2,\wNodey2) - \pgflinewidth};
+    }
+    \def\pktwidth{\n1}
+    \def\pktheight{\n2}
+
+    \tikzset{artr/.style={router}}
+    \tikzset{abigrtr/.style={router, scale=1.5, semithick}} % thin (0.4pt) at scale 1.5 is semithick (0.6pt)
+    \tikzset{albl/.style={font=\Large}}
+
+    \def\pktdist{2cm}
+    
+        % Routers and intermediate hidden nodes
+        % (hidden nodes are used to center packet diagrams between the routers)
+        \node[abigrtr](1){1};
+        \node[right=\pktdist of 1](12){};
+        \node[abigrtr, right=\pktdist of 12](2){2};;
+        \node[right=\pktdist of 2](23){};
+        \node[abigrtr, right=\pktdist of 23](3){3};
+        \node[right=\pktdist of 3](34){};
+        \node[abigrtr, right=\pktdist of 34](4){4};
+        \node[right=\pktdist of 4](45){};
+        \node[abigrtr, right=\pktdist of 45](5){5};
+
+        % Add dashed lines between routers
+        \draw[connec, dashed] (1) -- (2);
+        \draw[connec, dashed] (2) -- (3);
+        \draw[connec, dashed] (3) -- (4);
+        \draw[connec, dashed] (4) -- (5);
+
+        % Add labels below the routers
+        \node[below=.1cm of 2, albl] (label) {End with PSP};
+        \node[albl] at (3|-label) {End with PSP};
+        \node[albl] at (4|-label){End with PSP};
+
+        \node[below=.1cm of label](2b){};
+        \node[anchor=east, minimum width=1cm] at (2b-|2.west)(2bl){};
+        \node[anchor=west, minimum width=1cm] at (2b-|2.east)(2br){};
+
+        % Add packet diagrams
+        \begin{scope}[opacity=0, draw=red]
+        % temporary (transparant) pkt2
+            \node[right=.2cm of 2br.east, anchor=north west] (ypkt){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+            \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{\underline{fc00:0:3::}}}%
+            \srhdrnew{(\texttt{fc00:0:5::}, \\\phantom{(}\texttt{fc00:0:4::},\\\phantom{(}\texttt{fc00:0:3::}, \\\phantom{(}\texttt{fc00:0:2::})}%
+            {\underline{2}}%
+            \end{srv6packetnew}%
+            };
+        \end{scope}
+
+        % pkt1
+        \node[anchor=south] at (12|-ypkt.south)(pkt1){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+            \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{\underline{fc00:0:2::}}}%
+            \srhdrnew{(\texttt{fc00:0:5::}, \\\phantom{(}\texttt{fc00:0:4::},\\\phantom{(}\texttt{fc00:0:3::}, \\\phantom{(}\texttt{fc00:0:2::})}%
+            {3}%
+            \end{srv6packetnew}%
+        };
+        
+        % pkt2
+        \node[anchor=south] at (pkt1.south-|23) (pkt2){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+            \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{\underline{fc00:0:3::}}}%
+            \srhdrnew{(\texttt{fc00:0:5::}, \\\phantom{(}\texttt{fc00:0:4::},\\\phantom{(}\texttt{fc00:0:3::}, \\\phantom{(}\texttt{fc00:0:2::})}%
+            {\underline{2}}%
+            \end{srv6packetnew}%
+        };
+        
+        % pkt3
+        \node[anchor=south] at (pkt1.south-|34)(pkt3){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+            \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{\underline{fc00:0:4::}}}%
+                \srhdrnew{(\texttt{fc00:0:5::}, \\\phantom{(}\texttt{fc00:0:4::},\\\phantom{(}\texttt{fc00:0:3::}, \\\phantom{(}\texttt{fc00:0:2::})}%
+                {\underline{1}}%
+            \end{srv6packetnew}%
+        };
+        
+        % pkt4
+        \node[anchor=south] at (pkt1.south-|45)(pkt4){%
+            \begin{srv6packetnew}[\pktwidth pt]%
+                \ipsixhdrnew{\texttt{fc00:0:1::1}}{\texttt{\underline{fc00:0:5::}}}%
+            \end{srv6packetnew}%
+        };
+
+        \node[] at (pkt1-|2) (2b){};
+        \node[anchor=north, minimum width=1cm] at (2b|-pkt4)(2bc){};
+        \node[anchor=north, minimum width=1cm] at (pkt4-|3)(3bc){};
+        \node[anchor=north, minimum width=1cm] at (pkt4-|4)(4bc){};
+
+        \draw[bigarrow] (2bc.west) -- (2bc.east);
+        \draw[bigarrow] (3bc.west) -- (3bc.east);
+        \draw[bigarrow] (4bc.west) -- (4bc.east);
+
+
+\pgfsize{\mywidth}{\myheight}
+    \end{tikzpicture}%
+\typeout{W=\the\mywidth}
+\typeout{H=\the\myheight}
+\end{document}
+
+
+

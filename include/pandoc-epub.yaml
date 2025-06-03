@@ -1,0 +1,23 @@
+---
+title:
+- type: main
+  text: Segment Routing, Part III
+- type: subtitle
+  text: SRv6
+creator:
+- role: author
+  text: Clarence Filsfils
+- role: author
+  text: Ahmed Abdelsalam
+- role: author
+  text: Pablo Camarillo
+- role: author
+  text: François Clad
+- role: author
+  text: Kris Michielsen
+cover-image: epub-cover3.png
+#publisher: Amazon
+lang: en
+#date: 2024
+rights: Copyright © 2024 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
+...

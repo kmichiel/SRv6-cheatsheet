@@ -1,0 +1,28 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\usepackage{multirow}
+
+\def\headerbits{0}
+\newcounter{bitcnt}
+\loop\ifnum\thebitcnt<31
+\stepcounter{bitcnt}
+\edef\headerbits{\headerbits & \thebitcnt}
+\repeat
+
+\begin{document}%
+
+\setlength\extrarowheight{10pt}%
+\setlength\arrayrulewidth{1pt}%
+\begin{tabular}{|*{32}{>{\centering\arraybackslash}m{.3cm}|}}
+\headerbits\\[5pt]\hline
+\multicolumn{8}{|c|}{\LARGE Type} & \multicolumn{8}{c|}{\LARGE Length}
+& \LARGE R & \LARGE R & \LARGE R & \LARGE R
+& \multicolumn{12}{c|}{\LARGE MT ID} \\[5pt]\hline
+\multicolumn{32}{|c|}{\LARGE Metric}\\[5pt]\hline
+\multicolumn{8}{|c|}{\LARGE Flags} & \multicolumn{8}{c|}{\LARGE Algorithm}\\[5pt]\hline
+\multicolumn{8}{|c|}{\LARGE Loc Size} & \multicolumn{24}{c|}{\LARGE Locator (variable)\dots}\\[5pt]\hline
+\multicolumn{8}{|c|}{\LARGE Sub-TLV-len} & \multicolumn{24}{c|}{\LARGE Sub-TLVs (variable)\dots}\\[5pt]\hline
+\end{tabular}
+
+\end{document}

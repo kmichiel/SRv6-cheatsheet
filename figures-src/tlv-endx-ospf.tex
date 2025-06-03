@@ -1,0 +1,33 @@
+\input{dofirst}
+\documentclass{standalone}
+\input{preamble}
+\usepackage{multirow}
+
+\def\headerbits{0}
+\newcounter{bitcnt}
+\loop\ifnum\thebitcnt<31
+\stepcounter{bitcnt}
+\edef\headerbits{\headerbits & \thebitcnt}
+\repeat
+
+\begin{document}%
+
+\setlength\extrarowheight{10pt}%
+\setlength\arrayrulewidth{1pt}%
+\begin{tabular}{|*{32}{>{\centering\arraybackslash}m{.3cm}|}}
+\headerbits\\[5pt]\hline
+\multicolumn{16}{|c|}{\LARGE Type} & \multicolumn{16}{c|}{\LARGE Length}\\[5pt]\hline
+\multicolumn{16}{|c|}{\LARGE Endpoint Behavior} &
+\multicolumn{8}{c|}{\LARGE Flags} &
+\multicolumn{8}{c|}{\LARGE Reserved1}\\[5pt]\hline
+\multicolumn{8}{|c|}{\LARGE Algorithm} &
+\multicolumn{8}{c|}{\LARGE Weight} &
+\multicolumn{16}{c|}{\LARGE Reserved2}\\[5pt]\hline
+\multicolumn{32}{|c|}{\multirow{4}{*}{\LARGE SID (128 bits)}}\\[5pt]
+\multicolumn{32}{|c|}{}\\[5pt]
+\multicolumn{32}{|c|}{}\\[5pt]
+\multicolumn{32}{|c|}{}\\[5pt]\hline
+\multicolumn{32}{|c|}{\LARGE Sub-TLVs (variable)\dots}\\[5pt]\hline
+\end{tabular}
+
+\end{document}
